@@ -1,0 +1,37 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "359157",
+    "database": "PartNest",
+    "host": "127.0.0.1",
+    "port": 5432,
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": false
+    },
+    "logging": false
+  },
+  "test": {
+    "username": "postgres",
+    "password": "359157",
+    "database": "PartNest_test",
+    "host": "127.0.0.1",
+    "port": 5432,
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": false
+    },
+    "logging": false
+  },
+  "production": {
+    "use_env_variable": "DATABASE_URL",
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    },
+    "logging": false
+  }
+}
