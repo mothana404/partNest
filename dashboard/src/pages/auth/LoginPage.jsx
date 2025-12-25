@@ -9,11 +9,11 @@ import {
   Loader2,
   AlertCircle,
   ArrowRight,
-  Sparkles,
   Building2,
   GraduationCap
 } from 'lucide-react';
 import { AuthContext } from '../../context/AuthContext';
+import logo from '../../assets/PartnestLogo.png';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -109,8 +109,8 @@ const LoginPage = () => {
           {/* Logo */}
           <div className="mb-8">
             <div className="flex items-center gap-2 mb-6">
-              <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
-                <Sparkles className="w-6 h-6 text-white" />
+              <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm overflow-hidden">
+                <img src={logo} alt="PartNest logo" className="w-8 h-8 object-contain" />
               </div>
               <span className="text-2xl font-bold text-gray-900">PartNest</span>
             </div>
@@ -214,12 +214,12 @@ const LoginPage = () => {
                 />
                 <span className="ml-2 text-sm text-gray-700">Remember me</span>
               </label> */}
-              <Link 
+              {/* <Link 
                 to="/forgot-password" 
                 className="text-sm font-medium text-blue-600 hover:text-blue-700"
               >
                 Forgot password?
-              </Link>
+              </Link> */}
             </div>
 
             {/* Submit Button */}

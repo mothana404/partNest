@@ -14,7 +14,7 @@ router.get("/saved-jobs", savedJobsController.getSavedJobs);
 
 router.get("/", studentJobsController.getJobs);
 
-router.get("/:id", studentJobsController.getJobById);
+router.get("/getJob/:id", studentJobsController.getJobById);
 
 router.post("/:id/apply", studentJobsController.applyToJob);
 router.put("/applications/:id", studentApplicationsController.updateApplication);

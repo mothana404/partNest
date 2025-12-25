@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
-import axios from 'axios';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
+import axios from "axios";
 import {
   Mail,
   Lock,
@@ -19,26 +19,26 @@ import {
   Award,
   Info,
   Users,
-  Building2
-} from 'lucide-react';
+  Building2,
+} from "lucide-react";
 
 const RegisterStudent = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    fullName: '',
-    phoneNumber: '',
-    university: '',
-    major: '',
+    email: "",
+    password: "",
+    confirmPassword: "",
+    fullName: "",
+    phoneNumber: "",
+    university: "",
+    major: "",
     year: new Date().getFullYear(),
-    gpa: '',
-    age: '',
-    about: '',
-    cvLink: ''
+    gpa: "",
+    age: "",
+    about: "",
+    cvLink: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -48,37 +48,37 @@ const RegisterStudent = () => {
 
   // Universities list (you can expand this)
   const universities = [
-    'Jordan University of Science and Technology',
-    'University of Jordan',
-    'Jordan University',
-    'Hashemite University',
-    'Yarmouk University',
-    'Al-Balqa Applied University',
-    'German Jordanian University',
-    'Princess Sumaya University for Technology',
-    'Other'
+    "Jordan University of Science and Technology",
+    "University of Jordan",
+    "Jordan University",
+    "Hashemite University",
+    "Yarmouk University",
+    "Al-Balqa Applied University",
+    "German Jordanian University",
+    "Princess Sumaya University for Technology",
+    "Other",
   ];
 
   // Common majors (you can expand this)
   const majors = [
-    'Computer Science',
-    'Software Engineering',
-    'Computer Engineering',
-    'Information Technology',
-    'Data Science',
-    'Cyber Security',
-    'Artificial Intelligence',
-    'Business Administration',
-    'Engineering',
-    'Other'
+    "Computer Science",
+    "Software Engineering",
+    "Computer Engineering",
+    "Information Technology",
+    "Data Science",
+    "Cyber Security",
+    "Artificial Intelligence",
+    "Business Administration",
+    "Engineering",
+    "Other",
   ];
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
     // Clear error for this field when user types
     if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
@@ -87,83 +87,87 @@ const RegisterStudent = () => {
 
     // Email validation
     if (!formData.email) {
-      newErrors.email = 'Email is required';
+      newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
+      newErrors.email = "Email is invalid";
     }
 
     // Password validation
     if (!formData.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = "Password is required";
     } else if (formData.password.length < 8) {
-      newErrors.password = 'Password must be at least 8 characters';
+      newErrors.password = "Password must be at least 8 characters";
     } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
-      newErrors.password = 'Password must contain uppercase, lowercase and number';
+      newErrors.password =
+        "Password must contain uppercase, lowercase and number";
     }
 
     // Confirm password validation
     if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Please confirm your password';
+      newErrors.confirmPassword = "Please confirm your password";
     } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
+      newErrors.confirmPassword = "Passwords do not match";
     }
 
     // Full name validation
     if (!formData.fullName) {
-      newErrors.fullName = 'Full name is required';
+      newErrors.fullName = "Full name is required";
     } else if (formData.fullName.length < 3) {
-      newErrors.fullName = 'Full name must be at least 3 characters';
+      newErrors.fullName = "Full name must be at least 3 characters";
     }
 
     // Phone validation
     if (!formData.phoneNumber) {
-      newErrors.phoneNumber = 'Phone number is required';
-    } else if (!/^\+?[\d\s-()]+$/.test(formData.phoneNumber)) {
-      newErrors.phoneNumber = 'Invalid phone number format';
+      newErrors.phoneNumber = "Phone number is required";
+    } else if (!/^07\d{8}$/.test(formData.phoneNumber)) {
+      newErrors.phoneNumber = "Invalid Jordanian phone number";
     }
 
     // University validation
     if (!formData.university) {
-      newErrors.university = 'University is required';
+      newErrors.university = "University is required";
     }
 
     // Major validation
     if (!formData.major) {
-      newErrors.major = 'Major is required';
+      newErrors.major = "Major is required";
     }
 
     // Year validation
     const currentYear = new Date().getFullYear();
     if (!formData.year) {
-      newErrors.year = 'Graduation year is required';
+      newErrors.year = "Graduation year is required";
     } else if (formData.year < currentYear || formData.year > currentYear + 6) {
-      newErrors.year = `Year must be between ${currentYear} and ${currentYear + 6}`;
+      newErrors.year = `Year must be between ${currentYear} and ${
+        currentYear + 6
+      }`;
     }
 
     // GPA validation
     if (!formData.gpa) {
-      newErrors.gpa = 'GPA is required';
+      newErrors.gpa = "GPA is required";
     } else if (formData.gpa < 0 || formData.gpa > 4) {
-      newErrors.gpa = 'GPA must be between 0 and 4';
+      newErrors.gpa = "GPA must be between 0 and 4";
     }
 
     // Age validation
     if (!formData.age) {
-      newErrors.age = 'Age is required';
+      newErrors.age = "Age is required";
     } else if (formData.age < 18 || formData.age > 100) {
-      newErrors.age = 'Age must be between 18 and 100';
+      newErrors.age = "Age must be between 18 and 100";
     }
 
     // About validation
     if (!formData.about) {
-      newErrors.about = 'Tell us about yourself';
+      newErrors.about = "Tell us about yourself";
     } else if (formData.about.length < 50) {
-      newErrors.about = 'Please write at least 50 characters about yourself';
+      newErrors.about = "Please write at least 50 characters about yourself";
     }
 
     // CV Link validation (optional but if provided must be valid)
     if (formData.cvLink && !/^https?:\/\/.+/.test(formData.cvLink)) {
-      newErrors.cvLink = 'Please enter a valid URL starting with http:// or https://';
+      newErrors.cvLink =
+        "Please enter a valid URL starting with http:// or https://";
     }
 
     setErrors(newErrors);
@@ -172,7 +176,7 @@ const RegisterStudent = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
 
     setLoading(true);
@@ -181,19 +185,19 @@ const RegisterStudent = () => {
     try {
       // Remove confirmPassword before sending
       const { confirmPassword, ...dataToSend } = formData;
-      
+
       const response = await axios.post(
-        'http://localhost:8080/api/auth/studentSignUp',
+        "http://localhost:8080/api/auth/studentSignUp",
         {
           ...dataToSend,
           year: parseInt(dataToSend.year),
           gpa: parseFloat(dataToSend.gpa),
           age: parseInt(dataToSend.age),
-          role: 'STUDENT'
+          role: "STUDENT",
         },
         {
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         }
       );
@@ -203,15 +207,17 @@ const RegisterStudent = () => {
       if (data.success) {
         // Login user after successful registration
         login(data.data.user, data.data.accessToken);
-        navigate('/student/dashboard');
+        navigate("/student/dashboard");
       } else {
-        throw new Error(data.message || 'Registration failed');
+        throw new Error(data.message || "Registration failed");
       }
     } catch (err) {
       if (err.response) {
-        setErrors({ submit: err.response.data?.message || 'Registration failed' });
+        setErrors({
+          submit: err.response.data?.message || "Registration failed",
+        });
       } else if (err.request) {
-        setErrors({ submit: 'No response from server. Please try again.' });
+        setErrors({ submit: "No response from server. Please try again." });
       } else {
         setErrors({ submit: err.message });
       }
@@ -228,8 +234,12 @@ const RegisterStudent = () => {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-full mb-4">
             <GraduationCap className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Join as a Student</h1>
-          <p className="text-gray-600">Create your account and start your career journey</p>
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">
+            Join as a Student
+          </h1>
+          <p className="text-gray-600">
+            Create your account and start your career journey
+          </p>
         </div>
 
         {/* Main Card */}
@@ -250,7 +260,7 @@ const RegisterStudent = () => {
                   <User className="w-5 h-5" />
                   Account Information
                 </h2>
-                
+
                 <div className="grid md:grid-cols-2 gap-4">
                   {/* Email */}
                   <div>
@@ -265,13 +275,15 @@ const RegisterStudent = () => {
                         value={formData.email}
                         onChange={handleInputChange}
                         className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${
-                          errors.email ? 'border-red-300' : 'border-gray-300'
+                          errors.email ? "border-red-300" : "border-gray-300"
                         }`}
                         placeholder="student@example.com"
                       />
                     </div>
                     {errors.email && (
-                      <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.email}
+                      </p>
                     )}
                   </div>
 
@@ -288,13 +300,15 @@ const RegisterStudent = () => {
                         value={formData.fullName}
                         onChange={handleInputChange}
                         className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${
-                          errors.fullName ? 'border-red-300' : 'border-gray-300'
+                          errors.fullName ? "border-red-300" : "border-gray-300"
                         }`}
                         placeholder="John Doe"
                       />
                     </div>
                     {errors.fullName && (
-                      <p className="mt-1 text-sm text-red-600">{errors.fullName}</p>
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.fullName}
+                      </p>
                     )}
                   </div>
 
@@ -306,12 +320,12 @@ const RegisterStudent = () => {
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                       <input
-                        type={showPassword ? 'text' : 'password'}
+                        type={showPassword ? "text" : "password"}
                         name="password"
                         value={formData.password}
                         onChange={handleInputChange}
                         className={`w-full pl-10 pr-10 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${
-                          errors.password ? 'border-red-300' : 'border-gray-300'
+                          errors.password ? "border-red-300" : "border-gray-300"
                         }`}
                         placeholder="••••••••"
                       />
@@ -328,7 +342,9 @@ const RegisterStudent = () => {
                       </button>
                     </div>
                     {errors.password && (
-                      <p className="mt-1 text-sm text-red-600">{errors.password}</p>
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.password}
+                      </p>
                     )}
                   </div>
 
@@ -340,18 +356,22 @@ const RegisterStudent = () => {
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                       <input
-                        type={showConfirmPassword ? 'text' : 'password'}
+                        type={showConfirmPassword ? "text" : "password"}
                         name="confirmPassword"
                         value={formData.confirmPassword}
                         onChange={handleInputChange}
                         className={`w-full pl-10 pr-10 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${
-                          errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
+                          errors.confirmPassword
+                            ? "border-red-300"
+                            : "border-gray-300"
                         }`}
                         placeholder="••••••••"
                       />
                       <button
                         type="button"
-                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
                         className="absolute right-3 top-1/2 transform -translate-y-1/2"
                       >
                         {showConfirmPassword ? (
@@ -362,7 +382,9 @@ const RegisterStudent = () => {
                       </button>
                     </div>
                     {errors.confirmPassword && (
-                      <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.confirmPassword}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -374,7 +396,7 @@ const RegisterStudent = () => {
                   <Info className="w-5 h-5" />
                   Personal Information
                 </h2>
-                
+
                 <div className="grid md:grid-cols-2 gap-4">
                   {/* Phone Number */}
                   <div>
@@ -389,13 +411,17 @@ const RegisterStudent = () => {
                         value={formData.phoneNumber}
                         onChange={handleInputChange}
                         className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${
-                          errors.phoneNumber ? 'border-red-300' : 'border-gray-300'
+                          errors.phoneNumber
+                            ? "border-red-300"
+                            : "border-gray-300"
                         }`}
                         placeholder="+962770123456"
                       />
                     </div>
                     {errors.phoneNumber && (
-                      <p className="mt-1 text-sm text-red-600">{errors.phoneNumber}</p>
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.phoneNumber}
+                      </p>
                     )}
                   </div>
 
@@ -414,7 +440,7 @@ const RegisterStudent = () => {
                         min="18"
                         max="100"
                         className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${
-                          errors.age ? 'border-red-300' : 'border-gray-300'
+                          errors.age ? "border-red-300" : "border-gray-300"
                         }`}
                         placeholder="22"
                       />
@@ -432,7 +458,7 @@ const RegisterStudent = () => {
                   <GraduationCap className="w-5 h-5" />
                   Academic Information
                 </h2>
-                
+
                 <div className="grid md:grid-cols-2 gap-4">
                   {/* University */}
                   <div>
@@ -441,19 +467,23 @@ const RegisterStudent = () => {
                     </label>
                     <select
                       name="university"
-                                            value={formData.university}
+                      value={formData.university}
                       onChange={handleInputChange}
                       className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${
-                        errors.university ? 'border-red-300' : 'border-gray-300'
+                        errors.university ? "border-red-300" : "border-gray-300"
                       }`}
                     >
                       <option value="">Select University</option>
                       {universities.map((uni) => (
-                        <option key={uni} value={uni}>{uni}</option>
+                        <option key={uni} value={uni}>
+                          {uni}
+                        </option>
                       ))}
                     </select>
                     {errors.university && (
-                      <p className="mt-1 text-sm text-red-600">{errors.university}</p>
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.university}
+                      </p>
                     )}
                   </div>
 
@@ -467,23 +497,28 @@ const RegisterStudent = () => {
                       value={formData.major}
                       onChange={handleInputChange}
                       className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${
-                        errors.major ? 'border-red-300' : 'border-gray-300'
+                        errors.major ? "border-red-300" : "border-gray-300"
                       }`}
                     >
                       <option value="">Select Major</option>
                       {majors.map((major) => (
-                        <option key={major} value={major}>{major}</option>
+                        <option key={major} value={major}>
+                          {major}
+                        </option>
                       ))}
                     </select>
                     {errors.major && (
-                      <p className="mt-1 text-sm text-red-600">{errors.major}</p>
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.major}
+                      </p>
                     )}
                   </div>
 
                   {/* Graduation Year */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Expected Graduation Year <span className="text-red-500">*</span>
+                      Expected Graduation Year{" "}
+                      <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
                       <BookOpen className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -495,7 +530,7 @@ const RegisterStudent = () => {
                         min={new Date().getFullYear()}
                         max={new Date().getFullYear() + 6}
                         className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${
-                          errors.year ? 'border-red-300' : 'border-gray-300'
+                          errors.year ? "border-red-300" : "border-gray-300"
                         }`}
                         placeholder={new Date().getFullYear().toString()}
                       />
@@ -521,7 +556,7 @@ const RegisterStudent = () => {
                         max="4"
                         step="0.01"
                         className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${
-                          errors.gpa ? 'border-red-300' : 'border-gray-300'
+                          errors.gpa ? "border-red-300" : "border-gray-300"
                         }`}
                         placeholder="3.70"
                       />
@@ -547,7 +582,7 @@ const RegisterStudent = () => {
                     rows={4}
                     maxLength={500}
                     className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${
-                      errors.about ? 'border-red-300' : 'border-gray-300'
+                      errors.about ? "border-red-300" : "border-gray-300"
                     }`}
                     placeholder="Tell us about yourself, your interests, career goals, and what you're passionate about..."
                   />
@@ -559,8 +594,10 @@ const RegisterStudent = () => {
                 {/* CV Link */}
                 <div className="mt-4">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    CV/Resume Link 
-                    <span className="text-xs text-gray-500 ml-2">(Optional)</span>
+                    CV/Resume Link
+                    <span className="text-xs text-gray-500 ml-2">
+                      (Optional)
+                    </span>
                   </label>
                   <div className="relative">
                     <FileText className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -570,7 +607,7 @@ const RegisterStudent = () => {
                       value={formData.cvLink}
                       onChange={handleInputChange}
                       className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${
-                        errors.cvLink ? 'border-red-300' : 'border-gray-300'
+                        errors.cvLink ? "border-red-300" : "border-gray-300"
                       }`}
                       placeholder="https://example.com/your-cv.pdf"
                     />
@@ -579,7 +616,8 @@ const RegisterStudent = () => {
                     <p className="mt-1 text-sm text-red-600">{errors.cvLink}</p>
                   )}
                   <p className="mt-1 text-xs text-gray-500">
-                    Upload your CV to Google Drive, Dropbox, or any cloud service and paste the public link here
+                    Upload your CV to Google Drive, Dropbox, or any cloud
+                    service and paste the public link here
                   </p>
                 </div>
               </div>
@@ -593,12 +631,15 @@ const RegisterStudent = () => {
                     className="mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
                   <span className="ml-2 text-sm text-gray-600">
-                    By creating an account, I agree to the{' '}
+                    By creating an account, I agree to the{" "}
                     <Link to="/terms" className="text-blue-600 hover:underline">
                       Terms of Service
-                    </Link>
-                    {' '}and{' '}
-                    <Link to="/privacy" className="text-blue-600 hover:underline">
+                    </Link>{" "}
+                    and{" "}
+                    <Link
+                      to="/privacy"
+                      className="text-blue-600 hover:underline"
+                    >
                       Privacy Policy
                     </Link>
                   </span>
@@ -626,8 +667,11 @@ const RegisterStudent = () => {
                 </button>
 
                 <p className="text-center text-sm text-gray-600">
-                  Already have an account?{' '}
-                  <Link to="/login" className="text-blue-600 hover:underline font-medium">
+                  Already have an account?{" "}
+                  <Link
+                    to="/login"
+                    className="text-blue-600 hover:underline font-medium"
+                  >
                     Sign in
                   </Link>
                 </p>
@@ -646,7 +690,8 @@ const RegisterStudent = () => {
               <h3 className="font-semibold">Build Your Profile</h3>
             </div>
             <p className="text-sm text-gray-600">
-              Create a comprehensive profile to showcase your academic achievements and skills
+              Create a comprehensive profile to showcase your academic
+              achievements and skills
             </p>
           </div>
 
@@ -658,7 +703,8 @@ const RegisterStudent = () => {
               <h3 className="font-semibold">Connect with Companies</h3>
             </div>
             <p className="text-sm text-gray-600">
-              Get discovered by top companies looking for talented students like you
+              Get discovered by top companies looking for talented students like
+              you
             </p>
           </div>
 
@@ -670,7 +716,8 @@ const RegisterStudent = () => {
               <h3 className="font-semibold">Join Events</h3>
             </div>
             <p className="text-sm text-gray-600">
-              Participate in career events, workshops, and networking opportunities
+              Participate in career events, workshops, and networking
+              opportunities
             </p>
           </div>
         </div>

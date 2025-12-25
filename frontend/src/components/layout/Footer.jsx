@@ -63,28 +63,18 @@ const Footer = () => {
             <h3 className="text-white text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/jobs" className="hover:text-white transition-colors duration-300">
+                <Link to="/Jobs" className="hover:text-white transition-colors duration-300">
                   Browse Jobs
                 </Link>
               </li>
               <li>
-                <Link to="/companies" className="hover:text-white transition-colors duration-300">
+                <Link to="http://localhost:3000/login" className="hover:text-white transition-colors duration-300">
                   Companies
                 </Link>
               </li>
               <li>
-                <Link to="/candidates" className="hover:text-white transition-colors duration-300">
+                <Link to="http://localhost:3000/login" className="hover:text-white transition-colors duration-300">
                   Browse Candidates
-                </Link>
-              </li>
-              <li>
-                <Link to="/pricing" className="hover:text-white transition-colors duration-300">
-                  Pricing Plans
-                </Link>
-              </li>
-              <li>
-                <Link to="/blog" className="hover:text-white transition-colors duration-300">
-                  Blog & News
                 </Link>
               </li>
             </ul>
@@ -95,22 +85,17 @@ const Footer = () => {
             <h3 className="text-white text-lg font-semibold mb-4">For Employers</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/post-job" className="hover:text-white transition-colors duration-300">
+                <Link to="http://localhost:3000/login" className="hover:text-white transition-colors duration-300">
                   Post a Job
                 </Link>
               </li>
               <li>
-                <Link to="/pricing" className="hover:text-white transition-colors duration-300">
+                <Link to="http://localhost:3000/login" className="hover:text-white transition-colors duration-300">
                   Pricing Plans
                 </Link>
               </li>
               <li>
-                <Link to="/resources" className="hover:text-white transition-colors duration-300">
-                  Resources
-                </Link>
-              </li>
-              <li>
-                <Link to="/employer-guide" className="hover:text-white transition-colors duration-300">
+                <Link to="http://localhost:3000/login" className="hover:text-white transition-colors duration-300">
                   Employer Guide
                 </Link>
               </li>

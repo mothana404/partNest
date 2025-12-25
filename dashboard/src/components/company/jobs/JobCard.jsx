@@ -5,6 +5,10 @@ import {
 
 const JobCard = ({ job, isSaved, application, onSave, onApply, onViewDetails }) => {
   const hasApplied = !!application;
+  
+  // Check if deadline has passed
+  const isPastDeadline = job.applicationDeadline && 
+    new Date(job.applicationDeadline) < new Date();
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -24,7 +28,8 @@ const JobCard = ({ job, isSaved, application, onSave, onApply, onViewDetails }) 
   };
 
   const isDeadlineNear = job.applicationDeadline && 
-    new Date(job.applicationDeadline) < new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    new Date(job.applicationDeadline) < new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) &&
+    !isPastDeadline;
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg hover:shadow-lg transition-all duration-200 hover:border-blue-200 flex flex-col h-full">
@@ -109,9 +114,16 @@ const JobCard = ({ job, isSaved, application, onSave, onApply, onViewDetails }) 
           {/* Deadline */}
           {job.applicationDeadline && (
             <div className="flex items-center gap-2 text-sm">
-              <AlertCircle className={`w-4 h-4 flex-shrink-0 ${isDeadlineNear ? 'text-red-500' : 'text-yellow-500'}`} />
-              <span className={isDeadlineNear ? 'text-red-600 font-medium' : 'text-gray-600'}>
+              <AlertCircle className={`w-4 h-4 flex-shrink-0 ${
+                isPastDeadline ? 'text-gray-400' : isDeadlineNear ? 'text-red-500' : 'text-yellow-500'
+              }`} />
+              <span className={
+                isPastDeadline ? 'text-gray-500' : 
+                isDeadlineNear ? 'text-red-600 font-medium' : 
+                'text-gray-600'
+              }>
                 Deadline: {new Date(job.applicationDeadline).toLocaleDateString()}
+                {isPastDeadline && ' (Expired)'}
               </span>
             </div>
           )}
@@ -162,6 +174,16 @@ const JobCard = ({ job, isSaved, application, onSave, onApply, onViewDetails }) 
         </div>
       )}
 
+      {/* Deadline Expired Warning */}
+      {isPastDeadline && !hasApplied && (
+        <div className="px-6 mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg border bg-gray-100 text-gray-600 border-gray-300">
+            <AlertCircle className="w-4 h-4" />
+            Application deadline has passed
+          </div>
+        </div>
+      )}
+
       {/* Actions - Fixed at bottom */}
       <div className="mt-auto p-6 pt-4 border-t border-gray-100">
         <div className="flex items-center justify-between gap-3">
@@ -175,11 +197,17 @@ const JobCard = ({ job, isSaved, application, onSave, onApply, onViewDetails }) 
           
           {!hasApplied ? (
             <button
-              onClick={onApply}
-              className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+              onClick={isPastDeadline ? undefined : onApply}
+              disabled={isPastDeadline}
+              className={`flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 text-sm rounded-lg transition-colors font-medium ${
+                isPastDeadline 
+                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+                  : 'bg-blue-600 text-white hover:bg-blue-700'
+              }`}
+              title={isPastDeadline ? 'Application deadline has passed' : 'Apply for this job'}
             >
               <Send className="w-4 h-4" />
-              Apply Now
+              {isPastDeadline ? 'Deadline Passed' : 'Apply Now'}
             </button>
           ) : (
             <div className="flex-1 text-center">

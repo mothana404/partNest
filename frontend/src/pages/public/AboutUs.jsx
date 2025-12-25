@@ -39,23 +39,22 @@ const AboutUs = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ 
-                duration: 0.6,     // Animation duration
-                delay: 0.5,        // Delay before animation starts
-                ease: "easeOut"    // Animation easing
+                duration: 0.6,
+                delay: 0.5,
+                ease: "easeOut"
               }}
               className="text-center mb-16"
             >
               <div className="inline-block px-4 py-2 bg-blue-100 rounded-full mb-4">
                 <span className="text-blue-800 font-semibold">
-                  For Students
+                  For University Students
                 </span>
               </div>
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-                Balance Your Studies with Professional Growth
+                Earn While You Learn Across All Industries
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Discover flexible part-time opportunities that complement your
-                academic journey while gaining valuable industry experience.
+                Whether you're interested in retail, hospitality, education, healthcare, or marketing, find flexible opportunities that fit your schedule and build real-world experience.
               </p>
             </motion.div>
 
@@ -63,32 +62,32 @@ const AboutUs = () => {
             <div className="grid md:grid-cols-3 gap-8 mb-16">
               <StudentFeatureCard
                 icon={<FaClock />}
-                title="Flexible Hours"
-                description="Work around your class schedule with adaptable working hours that prioritize your studies."
+                title="Flexible Schedules"
+                description="Work around your classes with part-time positions designed for busy students."
                 features={[
-                  "10-20 hours per week",
-                  "Weekend options available",
-                  "Exam period flexibility",
+                  "Weekend & evening shifts",
+                  "Exam period accommodations",
+                  "Choose your own hours",
                 ]}
               />
               <StudentFeatureCard
                 icon={<FaLaptopCode />}
-                title="Remote Opportunities"
-                description="Access remote work opportunities that let you work from your campus or home."
+                title="Diverse Industries"
+                description="Explore opportunities in retail, food service, tutoring, healthcare support, and more."
                 features={[
-                  "Work from anywhere",
-                  "Virtual collaboration",
-                  "Real project experience",
+                  "Retail & customer service",
+                  "Food & hospitality",
+                  "Office administration",
                 ]}
               />
               <StudentFeatureCard
                 icon={<FaGraduationCap />}
-                title="Academic Integration"
-                description="Gain credits and practical experience that counts towards your degree."
+                title="Build Your Resume"
+                description="Gain valuable work experience that employers look for when you graduate."
                 features={[
-                  "Course credit eligible",
-                  "Industry certifications",
-                  "Portfolio building",
+                  "Develop transferable skills",
+                  "Professional references",
+                  "Industry connections",
                 ]}
               />
             </div>
@@ -99,14 +98,14 @@ const AboutUs = () => {
                 Partner Universities
               </h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-                <UniversityCard name="University of Science and Technology" students="500+" programs="15+" />
+                <UniversityCard name="University of Jordan" students="500+" programs="15+" />
                 <UniversityCard
                   name="The Hashemite University"
                   students="450+"
                   programs="12+"
                 />
                 <UniversityCard name="Yarmouk University" students="400+" programs="10+" />
-                <UniversityCard name="University of Jordan" students="350+" programs="8+" />
+                <UniversityCard name="Jordan University of Science and Technology" students="350+" programs="8+" />
               </div>
             </div>
 
@@ -114,23 +113,23 @@ const AboutUs = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               <MetricCard
                 number="5,000+"
-                label="University of Jordan"
+                label="Active Students"
                 growth="+45% from last year"
               />
               <MetricCard
-                number="92%"
-                label="Success Rate"
+                number="85%"
+                label="Job Placement Rate"
                 growth="Industry Leading"
               />
               <MetricCard
-                number="$25/hr"
-                label="Average Pay"
-                growth="+20% from last year"
+                number="$15/hr"
+                label="Average Hourly Rate"
+                growth="Competitive wages"
               />
               <MetricCard
-                number="85%"
-                label="Convert to Full-time"
-                growth="After graduation"
+                number="78%"
+                label="Skill Development"
+                growth="Report improved skills"
               />
             </div>
           </div>
@@ -144,9 +143,9 @@ const AboutUs = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ 
-                duration: 0.8,     // Animation duration
-                delay: 0.2,        // Delay before animation starts
-                ease: "easeOut"    // Animation easing
+                duration: 0.8,
+                delay: 0.2,
+                ease: "easeOut"
               }}
               className="text-center mb-16"
             >
@@ -156,8 +155,8 @@ const AboutUs = () => {
                 </span>
               </div>
               <h3 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8">
-                Empowering Students Through
-                <span className="text-blue-600"> Meaningful Opportunities</span>
+                Connecting Students with
+                <span className="text-blue-600"> Opportunities Everywhere</span>
               </h3>
             </motion.div>
 
@@ -167,9 +166,9 @@ const AboutUs = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ 
-                    duration: 0.8,     // Animation duration
-                    delay: 0.2,        // Delay before animation starts
-                    ease: "easeOut"    // Animation easing
+                    duration: 0.8,
+                    delay: 0.2,
+                    ease: "easeOut"
                   }}
                 className="bg-white p-8 rounded-2xl shadow-xl"
               >
@@ -182,16 +181,13 @@ const AboutUs = () => {
                   </h4>
                 </div>
                 <p className="text-lg text-gray-600 leading-relaxed mb-6">
-                  To bridge the gap between academic learning and professional
-                  experience by connecting ambitious students with quality
-                  part-time opportunities that enhance their educational journey
-                  while providing valuable workplace skills.
+                  To empower university students by connecting them with flexible, student-friendly jobs across all industries—from retail stores and restaurants to tutoring centers and healthcare facilities. We help students gain valuable work experience while supporting their academic goals.
                 </p>
                 <ul className="space-y-4">
                   {[
-                    "Creating flexible work opportunities that prioritize education",
-                    "Fostering partnerships between universities and industry leaders",
-                    "Supporting student growth through practical experience",
+                    "Providing access to jobs in retail, hospitality, education, healthcare, and more",
+                    "Partnering with employers who understand student schedules and priorities",
+                    "Supporting students in building skills that last a lifetime",
                   ].map((item, index) => (
                     <li key={index} className="flex items-start">
                       <FaCheckCircle className="w-5 h-5 text-green-500 mt-1 mr-3" />
@@ -206,9 +202,9 @@ const AboutUs = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ 
-                    duration: 0.8,     // Animation duration
-                    delay: 0.2,        // Delay before animation starts
-                    ease: "easeOut"    // Animation easing
+                    duration: 0.8,
+                    delay: 0.2,
+                    ease: "easeOut"
                   }}
                 className="bg-white p-8 rounded-2xl shadow-xl"
               >
@@ -221,17 +217,13 @@ const AboutUs = () => {
                   </h4>
                 </div>
                 <p className="text-lg text-gray-600 leading-relaxed mb-6">
-                  To become the leading platform where education meets
-                  opportunity, creating a future where every student can gain
-                  valuable work experience without compromising their academic
-                  success.
+                  To become the leading platform where every university student can find meaningful employment opportunities that complement their studies, regardless of their field of interest or career aspirations.
                 </p>
                 <div className="grid grid-cols-2 gap-6">
                   <div className="bg-gray-50 p-4 rounded-xl">
                     <h5 className="font-bold text-gray-900 mb-2">2024 Goal</h5>
                     <p className="text-gray-600">
-                      Enable 100,000 students to secure meaningful part-time
-                      roles
+                      Connect 10,000 students with jobs across all industries
                     </p>
                   </div>
                   <div className="bg-gray-50 p-4 rounded-xl">
@@ -239,7 +231,7 @@ const AboutUs = () => {
                       5-Year Vision
                     </h5>
                     <p className="text-gray-600">
-                      Expand to 1000+ universities globally
+                      Partner with 100+ universities nationwide
                     </p>
                   </div>
                 </div>
@@ -254,26 +246,26 @@ const AboutUs = () => {
               <div className="grid md:grid-cols-4 gap-8">
                 <CoreValueCard
                   icon={<FaGraduationCap />}
-                  title="Education First"
-                  description="We prioritize academic success while providing valuable work experience"
+                  title="Students First"
+                  description="Your education is our priority. We ensure every job fits your academic schedule"
                   color="blue"
                 />
                 <CoreValueCard
                   icon={<FaHandshake />}
-                  title="Quality Partnerships"
-                  description="Building trusted relationships with top companies and universities"
+                  title="Industry Diversity"
+                  description="Partnering with employers across retail, hospitality, education, healthcare, and beyond"
                   color="green"
                 />
                 <CoreValueCard
                   icon={<FaUsers />}
-                  title="Student Success"
-                  description="Supporting students throughout their professional journey"
+                  title="Fair Opportunities"
+                  description="Equal access to quality jobs for all students, regardless of major or experience level"
                   color="purple"
                 />
                 <CoreValueCard
                   icon={<FaLaptopCode />}
-                  title="Innovation"
-                  description="Continuously improving our platform to better serve students"
+                  title="Simple & Accessible"
+                  description="Making job searching easy with our user-friendly platform designed for students"
                   color="red"
                 />
               </div>
@@ -285,29 +277,95 @@ const AboutUs = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ 
-                duration: 0.8,     // Animation duration
-                delay: 0.2,        // Delay before animation starts
-                ease: "easeOut"    // Animation easing
+                duration: 0.8,
+                delay: 0.2,
+                ease: "easeOut"
               }}
               className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white"
             >
               <div className="text-center mb-8">
                 <h4 className="text-2xl font-bold mb-2">Our Impact</h4>
                 <p className="text-lg opacity-90">
-                  Making a difference in students' lives
+                  Making a real difference for students everywhere
                 </p>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-                <ImpactCard number="50,000+" label="Students Placed" />
-                <ImpactCard number="1,000+" label="Partner Companies" />
-                <ImpactCard number="200+" label="Universities" />
-                <ImpactCard number="95%" label="Student Satisfaction" />
+                <ImpactCard number="5,000+" label="Students Hired" />
+                <ImpactCard number="500+" label="Partner Employers" />
+                <ImpactCard number="50+" label="Universities" />
+                <ImpactCard number="88%" label="Student Satisfaction" />
               </div>
             </motion.div>
           </div>
         </section>
 
-        {/* Continue with remaining sections in Part 2... */}
+        {/* Industries We Serve Section */}
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ 
+                duration: 0.6,
+                delay: 0.3,
+                ease: "easeOut"
+              }}
+              className="text-center mb-16"
+            >
+              <div className="inline-block px-4 py-2 bg-blue-100 rounded-full mb-4">
+                <span className="text-blue-800 font-semibold">
+                  All Industries Welcome
+                </span>
+              </div>
+              <h3 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                Opportunities Across Every Sector
+              </h3>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                No matter what you're studying or what interests you, we have jobs that match your goals and schedule.
+              </p>
+            </motion.div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <IndustryCard
+                emoji="🛒"
+                title="Retail & Sales"
+                description="Work in stores, boutiques, and shopping centers. Perfect for developing customer service and communication skills."
+                examples={["Sales Associate", "Cashier", "Stock Clerk", "Visual Merchandiser"]}
+              />
+              <IndustryCard
+                emoji="🍽️"
+                title="Food & Hospitality"
+                description="Join restaurants, cafes, and hotels. Great for students who enjoy fast-paced, social environments."
+                examples={["Server", "Barista", "Host/Hostess", "Kitchen Assistant"]}
+              />
+              <IndustryCard
+                emoji="📚"
+                title="Education & Tutoring"
+                description="Share your knowledge by tutoring younger students or assisting in educational centers."
+                examples={["Private Tutor", "Teaching Assistant", "After-school Program Staff", "Language Instructor"]}
+              />
+              <IndustryCard
+                emoji="🏥"
+                title="Healthcare Support"
+                description="Support healthcare facilities with administrative and patient care assistance roles."
+                examples={["Medical Receptionist", "Care Assistant", "Pharmacy Technician", "Patient Coordinator"]}
+              />
+              <IndustryCard
+                emoji="💼"
+                title="Office & Administration"
+                description="Build professional skills in business environments with flexible office-based positions."
+                examples={["Administrative Assistant", "Data Entry Clerk", "Receptionist", "Office Coordinator"]}
+              />
+              <IndustryCard
+                emoji="🎨"
+                title="Creative & Marketing"
+                description="Explore creative roles in marketing agencies, design studios, and media companies."
+                examples={["Social Media Assistant", "Content Creator", "Graphic Design Intern", "Marketing Coordinator"]}
+              />
+            </div>
+          </div>
+        </section>
       </div>
       <Footer />
     </>
@@ -321,9 +379,9 @@ const StudentFeatureCard = ({ icon, title, description, features }) => (
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
     transition={{ 
-        duration: 0.8,     // Animation duration
-        delay: 0.2,        // Delay before animation starts
-        ease: "easeOut"    // Animation easing
+        duration: 0.8,
+        delay: 0.2,
+        ease: "easeOut"
       }}
     className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300"
   >
@@ -360,9 +418,9 @@ const MetricCard = ({ number, label, growth }) => (
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
     transition={{ 
-        duration: 0.8,     // Animation duration
-        delay: 0.2,        // Delay before animation starts
-        ease: "easeOut"    // Animation easing
+        duration: 0.8,
+        delay: 0.2,
+        ease: "easeOut"
       }}
     className="bg-white rounded-xl shadow-lg p-6 text-center"
   >
@@ -378,9 +436,9 @@ const CoreValueCard = ({ icon, title, description, color }) => (
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
     transition={{ 
-        duration: 0.8,     // Animation duration
-        delay: 0.2,        // Delay before animation starts
-        ease: "easeOut"    // Animation easing
+        duration: 0.8,
+        delay: 0.2,
+        ease: "easeOut"
       }}
     className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300"
   >
@@ -397,6 +455,34 @@ const ImpactCard = ({ number, label }) => (
     <h5 className="text-3xl font-bold mb-2">{number}</h5>
     <p className="text-sm opacity-90">{label}</p>
   </div>
+);
+
+const IndustryCard = ({ emoji, title, description, examples }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ 
+        duration: 0.6,
+        delay: 0.1,
+        ease: "easeOut"
+      }}
+    className="bg-gradient-to-br from-gray-50 to-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-all duration-300 border border-gray-100"
+  >
+    <div className="text-5xl mb-4">{emoji}</div>
+    <h4 className="text-xl font-bold text-gray-900 mb-3">{title}</h4>
+    <p className="text-gray-600 mb-4">{description}</p>
+    <div className="space-y-2">
+      <p className="text-sm font-semibold text-gray-700">Common Roles:</p>
+      <div className="flex flex-wrap gap-2">
+        {examples.map((example, index) => (
+          <span key={index} className="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
+            {example}
+          </span>
+        ))}
+      </div>
+    </div>
+  </motion.div>
 );
 
 export default AboutUs;

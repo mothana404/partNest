@@ -10,7 +10,7 @@ const PlatformBenefits = () => {
       id: 1,
       icon: "🎯",
       title: "Smart Job Matching",
-      description: "Our AI-powered system matches you with the perfect opportunities based on your skills, interests, and career goals.",
+      description: "Our system matches you with the perfect opportunities based on your skills, interests, and career goals.",
       stats: "93% match accuracy",
       benefits: [
         "Personalized job recommendations",

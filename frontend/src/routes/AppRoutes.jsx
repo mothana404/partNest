@@ -21,21 +21,21 @@ const AppRoutes = () => {
     <Router>
       <Routes>
         {/* Public Routes */}
-        <Route path="/SignUp" element={<Register />} />
-        <Route path="/SignIn" element={<Login />} />
+        {/* <Route path="/SignUp" element={<Register />} />
+        <Route path="/SignIn" element={<Login />} /> */}
         <Route path="/" element={<Home />} />
         <Route path="/About" element={<AboutUs />} />
         <Route path="/Contact" element={<ContactUs />} />
         <Route path="/Jobs" element={<BrowseJobs />} />
         
-        <Route path="/JobDetails" element={<JobDetails />} />
+        <Route path="/JobDetails/:id" element={<JobDetails />} />
         <Route path="/Profile" element={<UserProfile />} />
         <Route path="/Saved" element={<SavedJobs />} />
 
 
 
         {/* Protected Routes */}
-        <Route
+        {/* <Route
           path="/dashboard"
           element={
             <ProtectedRoute>
@@ -58,7 +58,7 @@ const AppRoutes = () => {
               <SavedJobs />
             </ProtectedRoute>
           }
-        />
+        /> */}
       </Routes>
     </Router>
   );

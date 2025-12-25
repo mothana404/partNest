@@ -1,11 +1,8 @@
 import { Fragment, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { 
-  Bell,
+import {
   Menu as MenuIcon,
-  Search,
   LogOut,
-  Clock,
   Calendar
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';

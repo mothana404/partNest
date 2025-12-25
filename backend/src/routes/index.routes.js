@@ -14,6 +14,7 @@ const adminCategoriesRoutes = require("./adminCategories.routes");
 const adminJobsRoutes = require('./adminJobs.routes');
 const adminApplicationsRoutes = require("./adminApplications.routes");
 const adminCompanyRoutes = require("./adminCompany.routes");
+const homePagesRoutes = require("./homePages.routes");
 
 router.use("/auth", authRoutes);
 router.use("/job", jobRoutes);
@@ -28,6 +29,7 @@ router.use('/admin/categories', adminCategoriesRoutes);
 router.use('/admin/jobs', adminJobsRoutes);
 router.use("/adminApplications",adminApplicationsRoutes);
 router.use("/adminCompany", adminCompanyRoutes);
+router.use("/home", homePagesRoutes);
 router.use((req, res) =>{
   notFoundResponse(res, "API endpoint not found");
 });

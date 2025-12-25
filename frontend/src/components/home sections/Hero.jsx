@@ -11,47 +11,47 @@ const Hero = () => {
 
   const companyLogos = [
     {
-      name: "Microsoft",
-      logo: "https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg",
+      name: "Zain",
+      logo: "https://images.seeklogo.com/logo-png/50/2/zain-logo-png_seeklogo-503471.png",
+      jobCount: "120+",
+      rating: "4.6",
+      industry: "Telecommunications",
+    },
+    {
+      name: "Orange Jordan",
+      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Orange_logo.svg/512px-Orange_logo.svg.png",
+      jobCount: "95+",
+      rating: "4.5",
+      industry: "Telecommunications",
+    },
+    {
+      name: "Royal Jordanian",
+      logo: "https://play-lh.googleusercontent.com/Z0jOr8A49h2UtPofnAU5AnIxupVCKByxf3-ClRmlcwI_k-X1neqMy3A0u77baYKGmXs",
+      jobCount: "70+",
+      rating: "4.7",
+      industry: "Aviation",
+    },
+    {
+      name: "Arab Bank",
+      logo: "https://www.tajlifestyle.com/sites/default/files/2025-02/website_logo_mk_0.png",
       jobCount: "150+",
       rating: "4.8",
-      industry: "Technology",
+      industry: "Banking & Finance",
     },
     {
-      name: "Google",
-      logo: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg",
-      jobCount: "200+",
-      rating: "4.9",
-      industry: "Technology",
-    },
-    {
-      name: "Amazon",
-      logo: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg",
-      jobCount: "300+",
+      name: "Aramex",
+      logo: "https://logowik.com/content/uploads/images/aramex9681.jpg",
+      jobCount: "130+",
       rating: "4.6",
-      industry: "E-commerce",
-    },
-    {
-      name: "Apple",
-      logo: "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg",
-      jobCount: "180+",
-      rating: "4.7",
-      industry: "Technology",
-    },
-    {
-      name: "Meta",
-      logo: "https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg",
-      jobCount: "120+",
-      rating: "4.5",
-      industry: "Social Media",
+      industry: "Logistics & Delivery",
     },
   ];
-  
+
   const companyDetails = [
     {
       label: "Active Jobs",
-      value: "500+",
-      description: "Open positions worldwide",
+      value: "800+",
+      description: "Open positions for students",
       color: "blue",
       icon: (
         <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -61,8 +61,8 @@ const Hero = () => {
     },
     {
       label: "Companies",
-      value: "2.5k+",
-      description: "Hiring partners",
+      value: "500+",
+      description: "Hiring employers",
       color: "purple",
       icon: (
         <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -71,20 +71,24 @@ const Hero = () => {
       ),
     },
     {
-      label: "Developers",
-      value: "1M+",
+      label: "Students",
+      value: "5K+",
       description: "Active job seekers",
       color: "green",
       icon: (
         <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-          <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+          <path
+            fillRule="evenodd"
+            d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+            clipRule="evenodd"
+          />
         </svg>
       ),
     },
     {
       label: "Success Rate",
-      value: "92%",
-      description: "Placement ratio",
+      value: "85%",
+      description: "Student placement",
       color: "orange",
       icon: (
         <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -117,14 +121,14 @@ const Hero = () => {
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 leading-tight">
               Find Your Dream
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 block mt-2">
-                IT Career
+                Student Job
               </span>
             </h1>
 
             <p className="text-xl text-gray-600 leading-relaxed">
-              Connect with top tech companies and start your journey towards a
-              successful career. Thousands of opportunities await for talented
-              professionals.
+              Connect with employers across all industries and start your
+              journey towards gaining valuable experience. Thousands of
+              opportunities await for university students.
             </p>
 
             {/* Search Bar */}
@@ -143,7 +147,7 @@ const Hero = () => {
             <div className="flex space-x-12">
               <div className="text-center">
                 <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">
-                  10k+
+                  800+
                 </div>
                 <div className="text-gray-600 font-medium mt-1">
                   Active Jobs
@@ -151,15 +155,15 @@ const Hero = () => {
               </div>
               <div className="text-center">
                 <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-purple-800">
-                  5k+
+                  500+
                 </div>
                 <div className="text-gray-600 font-medium mt-1">Companies</div>
               </div>
               <div className="text-center">
                 <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-pink-800">
-                  20k+
+                  5K+
                 </div>
-                <div className="text-gray-600 font-medium mt-1">Developers</div>
+                <div className="text-gray-600 font-medium mt-1">Students</div>
               </div>
             </div>
           </div>
@@ -195,11 +199,11 @@ const Hero = () => {
 
             <div className="relative">
               <h2 className="text-center text-3xl font-bold text-gray-900 mb-2">
-                Trusted by Leading Companies
+                Trusted by Leading Employers
               </h2>
               <p className="text-center text-gray-600 max-w-2xl mx-auto mb-10 text-lg">
-                Join thousands of successful companies that trust PartNest for
-                their IT recruitment needs
+                Join thousands of students who found their perfect job through
+                our platform
               </p>
 
               {/* Company Logos Grid */}
@@ -212,7 +216,7 @@ const Hero = () => {
                     <img
                       src={company.logo}
                       alt={company.name}
-                      className="h-12 w-auto grayscale group-hover:grayscale-0 transition-all duration-300 transform group-hover:scale-110"
+                      className="h-20 w-auto grayscale group-hover:grayscale-0 transition-all duration-300 transform group-hover:scale-110"
                     />
                     <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 w-full z-10">
                       <div className="bg-white rounded-xl shadow-lg p-3 text-center mx-4">
@@ -279,7 +283,9 @@ const Hero = () => {
                       clipRule="evenodd"
                     />
                   </svg>
-                  <span className="font-medium">Verified by PartNest</span>
+                  <span className="font-medium">
+                    Verified Student Employers
+                  </span>
                 </div>
               </div>
             </div>

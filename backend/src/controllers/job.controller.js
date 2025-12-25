@@ -1,4 +1,11 @@
-const { Job, Company, Category, User, Tag } = require("../../models/associations");
+const {
+  Job,
+  Company,
+  Category,
+  User,
+  Tag,
+  JobView,
+} = require("../../models/associations");
 const ApiResponse = require("../utils/response");
 const { Op } = require("sequelize");
 
@@ -35,7 +42,7 @@ const companyController = {
       where: whereConditions
     });
 
-    // Get jobs with all associations
+    // Get jobs with all associations including job views count
     const jobs = await Job.findAll({
       where: whereConditions,
       include: [
@@ -49,6 +56,12 @@ const companyController = {
           as: 'tags',
           attributes: ['id', 'name', 'slug'],
           through: { attributes: [] }
+        },
+        {
+          model: JobView,
+          as: 'jobViews',
+          attributes: ['id', 'studentId', 'viewedAt'],
+          required: false // LEFT JOIN to include jobs with 0 views
         }
       ],
       order: [['createdAt', 'DESC']],
@@ -56,10 +69,19 @@ const companyController = {
       offset
     });
 
+    // Add view count to each job
+    const jobsWithViewCount = jobs.map(job => {
+      const jobData = job.toJSON();
+      jobData.viewCount = jobData.jobViews ? jobData.jobViews.length : 0;
+      // Optionally remove the full jobViews array if you only need the count
+      // delete jobData.jobViews;
+      return jobData;
+    });
+
     const totalPages = Math.ceil(totalCount / parseInt(limit));
 
     return ApiResponse.successResponse(res, 200, "Jobs retrieved successfully", {
-      jobs,
+      jobs: jobsWithViewCount,
       pagination: {
         currentPage: parseInt(page),
         totalPages,
@@ -76,7 +98,7 @@ const companyController = {
   CreateJob: async (req, res) => {
     try {
       const userId = req.user.user_id;
-      
+
       // Get company ID from authenticated user
       const company = await Company.findOne({ where: { userId } });
       if (!company) {
@@ -89,7 +111,7 @@ const companyController = {
       // Create job
       const job = await Job.create({
         ...jobData,
-        companyId: company.id
+        companyId: company.id,
       });
 
       // Handle tags if provided
@@ -101,8 +123,8 @@ const companyController = {
               where: { name: tagName },
               defaults: {
                 name: tagName,
-                slug: tagName.toLowerCase().replace(/\s+/g, '-')
-              }
+                slug: tagName.toLowerCase().replace(/\s+/g, "-"),
+              },
             });
             return tag;
           })
@@ -117,19 +139,24 @@ const companyController = {
         include: [
           {
             model: Category,
-            as: 'category',
-            attributes: ['id', 'name']
+            as: "category",
+            attributes: ["id", "name"],
           },
           {
             model: Tag,
-            as: 'tags',
-            attributes: ['id', 'name', 'slug'],
-            through: { attributes: [] }
-          }
-        ]
+            as: "tags",
+            attributes: ["id", "name", "slug"],
+            through: { attributes: [] },
+          },
+        ],
       });
 
-      return ApiResponse.successResponse(res, 201, "Job created successfully", createdJob);
+      return ApiResponse.successResponse(
+        res,
+        201,
+        "Job created successfully",
+        createdJob
+      );
     } catch (error) {
       console.error("Create job error:", error);
       return ApiResponse.errorResponse(res, 500, "Failed to create job");
@@ -149,30 +176,35 @@ const companyController = {
 
       // Find job belonging to this company
       const job = await Job.findOne({
-        where: { 
+        where: {
           id: jobId,
-          companyId: company.id
+          companyId: company.id,
         },
         include: [
           {
             model: Category,
-            as: 'category',
-            attributes: ['id', 'name']
+            as: "category",
+            attributes: ["id", "name"],
           },
           {
             model: Tag,
-            as: 'tags',
-            attributes: ['id', 'name', 'slug'],
-            through: { attributes: [] }
-          }
-        ]
+            as: "tags",
+            attributes: ["id", "name", "slug"],
+            through: { attributes: [] },
+          },
+        ],
       });
 
       if (!job) {
         return ApiResponse.errorResponse(res, 404, "Job not found");
       }
 
-      return ApiResponse.successResponse(res, 200, "Job retrieved successfully", job);
+      return ApiResponse.successResponse(
+        res,
+        200,
+        "Job retrieved successfully",
+        job
+      );
     } catch (error) {
       console.error("Get job error:", error);
       return ApiResponse.errorResponse(res, 500, "Failed to retrieve job");
@@ -192,10 +224,10 @@ const companyController = {
 
       // Find job belonging to this company
       const job = await Job.findOne({
-        where: { 
+        where: {
           id: jobId,
-          companyId: company.id
-        }
+          companyId: company.id,
+        },
       });
 
       if (!job) {
@@ -221,8 +253,8 @@ const companyController = {
                 where: { name: tagName },
                 defaults: {
                   name: tagName,
-                  slug: tagName.toLowerCase().replace(/\s+/g, '-')
-                }
+                  slug: tagName.toLowerCase().replace(/\s+/g, "-"),
+                },
               });
               return tag;
             })
@@ -238,19 +270,24 @@ const companyController = {
         include: [
           {
             model: Category,
-            as: 'category',
-            attributes: ['id', 'name']
+            as: "category",
+            attributes: ["id", "name"],
           },
           {
             model: Tag,
-            as: 'tags',
-            attributes: ['id', 'name', 'slug'],
-            through: { attributes: [] }
-          }
-        ]
+            as: "tags",
+            attributes: ["id", "name", "slug"],
+            through: { attributes: [] },
+          },
+        ],
       });
 
-      return ApiResponse.successResponse(res, 200, "Job updated successfully", updatedJob);
+      return ApiResponse.successResponse(
+        res,
+        200,
+        "Job updated successfully",
+        updatedJob
+      );
     } catch (error) {
       console.error("Update job error:", error);
       return ApiResponse.errorResponse(res, 500, "Failed to update job");
@@ -270,10 +307,10 @@ const companyController = {
 
       // Find job belonging to this company
       const job = await Job.findOne({
-        where: { 
+        where: {
           id: jobId,
-          companyId: company.id
-        }
+          companyId: company.id,
+        },
       });
 
       if (!job) {
@@ -284,7 +321,7 @@ const companyController = {
       await job.destroy();
 
       return ApiResponse.successResponse(res, 200, "Job deleted successfully", {
-        deletedJobId: jobId
+        deletedJobId: jobId,
       });
     } catch (error) {
       console.error("Delete job error:", error);

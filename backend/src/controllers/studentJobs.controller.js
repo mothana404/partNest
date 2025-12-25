@@ -261,7 +261,7 @@ const studentJobsController = {
 
       const job = await Job.findOne({
         where: {
-          id,
+          id: id,
           status: "ACTIVE",
         },
         include: [
@@ -295,13 +295,15 @@ const studentJobsController = {
       }
 
       const jobCount = await JobView.findOne({
-        where: { studentId: studentID, jobId: job.id },
+        where: { studentId: studentID.dataValues.id, jobId: job.id },
       });
 
       if (!jobCount) {
-        await JobView.create({
-          studentId: studentID,
-          jobId: job.id,
+        await JobView.findOrCreate({
+          where: {
+            studentId: studentID.id,
+            jobId: job.id,
+          },
         });
       }
 

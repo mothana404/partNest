@@ -3,7 +3,7 @@ import Hero from "../../components/home sections/Hero";
 import HowItWorks from "../../components/home sections/HowItWorks";
 import Navbar from "../../components/layout/Navbar";
 import PlatformBenefits from "../../components/home sections/PlatformBenefits";
-import TopOpportunities from "../../components/home sections/TopOpportunities";
+// import TopOpportunities from "../../components/home sections/TopOpportunities";
 import { useEffect } from "react";
 
 const Home = () => {
@@ -15,7 +15,7 @@ const Home = () => {
     <>
       <Navbar></Navbar>
       <Hero></Hero>
-      <TopOpportunities></TopOpportunities>
+      {/* <TopOpportunities></TopOpportunities> */}
       <HowItWorks></HowItWorks>
       <PlatformBenefits></PlatformBenefits>
       <Footer></Footer>

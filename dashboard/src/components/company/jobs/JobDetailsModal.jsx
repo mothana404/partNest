@@ -1,22 +1,64 @@
 import { useState, useEffect } from "react";
-import { 
-  X, Building2, MapPin, Briefcase, Calendar, DollarSign, 
-  Users, AlertCircle, ExternalLink, Bookmark, BookmarkCheck, Send,
-  CheckCircle, Award, Phone, Mail, FileText
+import {
+  X,
+  Building2,
+  MapPin,
+  Briefcase,
+  Calendar,
+  DollarSign,
+  Users,
+  AlertCircle,
+  ExternalLink,
+  Bookmark,
+  BookmarkCheck,
+  Send,
+  CheckCircle,
+  Award,
+  Phone,
+  Mail,
+  FileText,
 } from "lucide-react";
+import axios from "axios";
+import { useAuth } from "../../../hooks/useAuth";
 
-const JobDetailsModal = ({ job, isSaved, application, applications, onClose, onSave, onApply }) => {
+const JobDetailsModal = ({
+  job,
+  isSaved,
+  application,
+  applications,
+  onClose,
+  onSave,
+  onApply,
+}) => {
   const hasApplied = !!application;
   const [studentApplication, setStudentApplication] = useState(null);
+  const { getToken } = useAuth();
+  const token = getToken();
 
-  useEffect(() => {
-    // Use the application prop directly if provided
-    // This is the student's application for this job
+  useEffect(() => {  
+    const fetchJobDetails = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/api/student/job/getJob/${job.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = response.data;
+        // Handle the response data as needed
+      } catch (error) {
+        console.error("Error fetching job details:", error);
+      }
+    };
+    fetchJobDetails();
     if (application) {
       setStudentApplication(application);
     } else if (applications && applications.length > 0) {
       // If applications array is provided, find the one for this job
-      const app = applications.find(app => app.jobId === job.id);
+      const app = applications.find((app) => app.jobId === job.id);
       if (app) {
         setStudentApplication(app);
       }
@@ -27,20 +69,20 @@ const JobDetailsModal = ({ job, isSaved, application, applications, onClose, onS
     if (!dateString) return null;
     const date = new Date(dateString);
     return {
-      date: date.toLocaleDateString('en-US', { 
-        weekday: 'long',
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
+      date: date.toLocaleDateString("en-US", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
       }),
-      time: date.toLocaleTimeString('en-US', { 
-        hour: '2-digit', 
-        minute: '2-digit' 
-      })
+      time: date.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
     };
   };
 
-  const interviewInfo = studentApplication?.interviewDate 
+  const interviewInfo = studentApplication?.interviewDate
     ? formatDateTime(studentApplication.interviewDate)
     : null;
 
@@ -53,9 +95,9 @@ const JobDetailsModal = ({ job, isSaved, application, applications, onClose, onS
             <div className="flex items-start gap-4 flex-1">
               <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border-2 border-white/30 flex-shrink-0">
                 {job.company?.user?.image ? (
-                  <img 
-                    src={job.company.user.image} 
-                    alt={job.company?.companyName || 'Company'}
+                  <img
+                    src={job.company.user.image}
+                    alt={job.company?.companyName || "Company"}
                     className="w-20 h-20 rounded-xl object-cover"
                   />
                 ) : (
@@ -64,19 +106,24 @@ const JobDetailsModal = ({ job, isSaved, application, applications, onClose, onS
               </div>
               <div className="flex-1 min-w-0">
                 <h2 className="text-3xl font-bold mb-2">{job.title}</h2>
-                <p className="text-blue-100 text-lg mb-3">{job.company?.companyName || 'Company'}</p>
+                <p className="text-blue-100 text-lg mb-3">
+                  {job.company?.companyName || "Company"}
+                </p>
                 <div className="flex flex-wrap items-center gap-4 text-sm text-blue-100">
                   <span className="flex items-center gap-1.5 bg-white/20 px-3 py-1 rounded-lg">
                     <MapPin className="w-4 h-4" />
-                    {job.location || 'Remote'}
+                    {job.location || "Remote"}
                   </span>
                   <span className="flex items-center gap-1.5 bg-white/20 px-3 py-1 rounded-lg">
                     <Briefcase className="w-4 h-4" />
-                    {(job.jobType || job.type || '').replace(/_/g, ' ')}
+                    {(job.jobType || job.type || "").replace(/_/g, " ")}
                   </span>
                   <span className="flex items-center gap-1.5 bg-white/20 px-3 py-1 rounded-lg">
                     <Calendar className="w-4 h-4" />
-                    Posted {new Date(job.createdAt || job.postedAt).toLocaleDateString()}
+                    Posted{" "}
+                    {new Date(
+                      job.createdAt || job.postedAt
+                    ).toLocaleDateString()}
                   </span>
                 </div>
               </div>
@@ -91,27 +138,29 @@ const JobDetailsModal = ({ job, isSaved, application, applications, onClose, onS
         </div>
 
         {/* Interview Date Banner - Show if student has interview scheduled */}
-        {interviewInfo && studentApplication?.status === 'INTERVIEW_SCHEDULED' && (
-          <div className="bg-gradient-to-r from-purple-500 to-pink-500 px-6 py-4 text-white">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
-                <Calendar className="w-6 h-6" />
+        {interviewInfo &&
+          studentApplication?.status === "INTERVIEW_SCHEDULED" && (
+            <div className="bg-gradient-to-r from-purple-500 to-pink-500 px-6 py-4 text-white">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                  <Calendar className="w-6 h-6" />
+                </div>
+                <div className="flex-1">
+                  <p className="font-semibold text-lg">Interview Scheduled!</p>
+                  <p className="text-purple-100 text-sm">
+                    Your interview is on{" "}
+                    <span className="font-bold">{interviewInfo.date}</span> at{" "}
+                    <span className="font-bold">{interviewInfo.time}</span>
+                  </p>
+                </div>
+                <CheckCircle className="w-6 h-6 text-white" />
               </div>
-              <div className="flex-1">
-                <p className="font-semibold text-lg">Interview Scheduled!</p>
-                <p className="text-purple-100 text-sm">
-                  Your interview is on <span className="font-bold">{interviewInfo.date}</span> at <span className="font-bold">{interviewInfo.time}</span>
-                </p>
-              </div>
-              <CheckCircle className="w-6 h-6 text-white" />
             </div>
-          </div>
-        )}
+          )}
 
         {/* Scrollable Content */}
         <div className="overflow-y-auto flex-1">
           <div className="p-6 space-y-6">
-
             {/* Key Information Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {(job.salaryMin || job.salaryRange?.min) && (
@@ -123,7 +172,9 @@ const JobDetailsModal = ({ job, isSaved, application, applications, onClose, onS
                     <span className="font-semibold">Salary Range</span>
                   </div>
                   <p className="text-gray-900 font-bold text-lg">
-                    {job.salaryCurrency || 'JOD'} {(job.salaryRange?.min || job.salaryMin)?.toLocaleString()} - {job.salaryRange?.max || job.salaryMax || 'Open'}
+                    {job.salaryCurrency || "JOD"}{" "}
+                    {(job.salaryRange?.min || job.salaryMin)?.toLocaleString()}{" "}
+                    - {job.salaryRange?.max || job.salaryMax || "Open"}
                   </p>
                   <p className="text-xs text-gray-500 mt-1">per month</p>
                 </div>
@@ -154,7 +205,9 @@ const JobDetailsModal = ({ job, isSaved, application, applications, onClose, onS
                     {new Date(job.applicationDeadline).toLocaleDateString()}
                   </p>
                   <p className="text-xs text-gray-500 mt-1">
-                    {new Date(job.applicationDeadline) > new Date() ? 'Still accepting' : 'Closed'}
+                    {new Date(job.applicationDeadline) > new Date()
+                      ? "Still accepting"
+                      : "Closed"}
                   </p>
                 </div>
               )}
@@ -168,10 +221,12 @@ const JobDetailsModal = ({ job, isSaved, application, applications, onClose, onS
                     <span className="font-semibold">Requirements</span>
                   </div>
                   <p className="text-gray-900 font-semibold text-sm">
-                    {job.experienceRequired || 'Not specified'}
+                    {job.experienceRequired || "Not specified"}
                   </p>
                   {job.educationRequired && (
-                    <p className="text-xs text-gray-600 mt-1">{job.educationRequired}</p>
+                    <p className="text-xs text-gray-600 mt-1">
+                      {job.educationRequired}
+                    </p>
                   )}
                 </div>
               )}
@@ -183,7 +238,9 @@ const JobDetailsModal = ({ job, isSaved, application, applications, onClose, onS
                 <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
                   <FileText className="w-5 h-5 text-blue-600" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900">Job Description</h3>
+                <h3 className="text-xl font-bold text-gray-900">
+                  Job Description
+                </h3>
               </div>
               <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed">
                 <p className="whitespace-pre-wrap">{job.description}</p>
@@ -197,7 +254,9 @@ const JobDetailsModal = ({ job, isSaved, application, applications, onClose, onS
                   <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
                     <CheckCircle className="w-5 h-5 text-red-600" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900">Requirements</h3>
+                  <h3 className="text-xl font-bold text-gray-900">
+                    Requirements
+                  </h3>
                 </div>
                 <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed">
                   <p className="whitespace-pre-wrap">{job.requirements}</p>
@@ -212,7 +271,9 @@ const JobDetailsModal = ({ job, isSaved, application, applications, onClose, onS
                   <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
                     <Briefcase className="w-5 h-5 text-green-600" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900">Responsibilities</h3>
+                  <h3 className="text-xl font-bold text-gray-900">
+                    Responsibilities
+                  </h3>
                 </div>
                 <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed">
                   <p className="whitespace-pre-wrap">{job.responsibilities}</p>
@@ -242,32 +303,48 @@ const JobDetailsModal = ({ job, isSaved, application, applications, onClose, onS
                   <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
                     <Building2 className="w-5 h-5 text-indigo-600" />
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900">About the Company</h3>
+                  <h3 className="text-xl font-bold text-gray-900">
+                    About the Company
+                  </h3>
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
                   {job.company.industry && (
                     <div className="bg-white rounded-lg p-4 border border-gray-100">
-                      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Industry</span>
-                      <p className="text-gray-900 font-semibold mt-1">{job.company.industry}</p>
+                      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                        Industry
+                      </span>
+                      <p className="text-gray-900 font-semibold mt-1">
+                        {job.company.industry}
+                      </p>
                     </div>
                   )}
                   {job.company.size && (
                     <div className="bg-white rounded-lg p-4 border border-gray-100">
-                      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Company Size</span>
-                      <p className="text-gray-900 font-semibold mt-1">{job.company.size}</p>
+                      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                        Company Size
+                      </span>
+                      <p className="text-gray-900 font-semibold mt-1">
+                        {job.company.size}
+                      </p>
                     </div>
                   )}
                   {job.company.foundedYear && (
                     <div className="bg-white rounded-lg p-4 border border-gray-100">
-                      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Founded</span>
-                      <p className="text-gray-900 font-semibold mt-1">{job.company.foundedYear}</p>
+                      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                        Founded
+                      </span>
+                      <p className="text-gray-900 font-semibold mt-1">
+                        {job.company.foundedYear}
+                      </p>
                     </div>
                   )}
                   {job.company.website && (
                     <div className="bg-white rounded-lg p-4 border border-gray-100">
-                      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Website</span>
-                      <a 
+                      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                        Website
+                      </span>
+                      <a
                         href={job.company.website}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -280,8 +357,10 @@ const JobDetailsModal = ({ job, isSaved, application, applications, onClose, onS
                   )}
                   {job.company.contactEmail && (
                     <div className="bg-white rounded-lg p-4 border border-gray-100">
-                      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Contact Email</span>
-                      <a 
+                      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                        Contact Email
+                      </span>
+                      <a
                         href={`mailto:${job.company.contactEmail}`}
                         className="text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-2 mt-1"
                       >
@@ -292,8 +371,10 @@ const JobDetailsModal = ({ job, isSaved, application, applications, onClose, onS
                   )}
                   {job.company.contactPhone && (
                     <div className="bg-white rounded-lg p-4 border border-gray-100">
-                      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Contact Phone</span>
-                      <a 
+                      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                        Contact Phone
+                      </span>
+                      <a
                         href={`tel:${job.company.contactPhone}`}
                         className="text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-2 mt-1"
                       >
@@ -303,10 +384,12 @@ const JobDetailsModal = ({ job, isSaved, application, applications, onClose, onS
                     </div>
                   )}
                 </div>
-                
+
                 {job.company.description && (
                   <div className="bg-white rounded-lg p-4 border border-gray-100">
-                    <p className="text-gray-700 text-sm leading-relaxed whitespace-pre-wrap">{job.company.description}</p>
+                    <p className="text-gray-700 text-sm leading-relaxed whitespace-pre-wrap">
+                      {job.company.description}
+                    </p>
                   </div>
                 )}
               </div>
@@ -321,12 +404,16 @@ const JobDetailsModal = ({ job, isSaved, application, applications, onClose, onS
               onClick={onSave}
               className={`inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium border-2 rounded-xl transition-all ${
                 isSaved
-                  ? 'bg-green-50 border-green-300 text-green-700 hover:bg-green-100 hover:shadow-md'
-                  : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50 hover:shadow-md'
+                  ? "bg-green-50 border-green-300 text-green-700 hover:bg-green-100 hover:shadow-md"
+                  : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50 hover:shadow-md"
               }`}
             >
-              {isSaved ? <BookmarkCheck className="w-5 h-5" /> : <Bookmark className="w-5 h-5" />}
-              {isSaved ? 'Saved' : 'Save Job'}
+              {isSaved ? (
+                <BookmarkCheck className="w-5 h-5" />
+              ) : (
+                <Bookmark className="w-5 h-5" />
+              )}
+              {isSaved ? "Saved" : "Save Job"}
             </button>
 
             {!hasApplied ? (
@@ -342,23 +429,30 @@ const JobDetailsModal = ({ job, isSaved, application, applications, onClose, onS
                 <div className="flex items-center gap-2 px-4 py-2 bg-green-50 border border-green-200 rounded-xl">
                   <CheckCircle className="w-5 h-5 text-green-600" />
                   <div>
-                    <p className="text-sm font-semibold text-green-700">Application Submitted</p>
+                    <p className="text-sm font-semibold text-green-700">
+                      Application Submitted
+                    </p>
                     <p className="text-xs text-green-600">
-                      Applied on {new Date((application || studentApplication)?.appliedAt).toLocaleDateString()}
+                      Applied on{" "}
+                      {new Date(
+                        (application || studentApplication)?.appliedAt
+                      ).toLocaleDateString()}
                     </p>
                   </div>
                 </div>
                 {studentApplication?.status && (
-                  <div className={`px-4 py-2 rounded-xl border-2 font-semibold text-sm ${
-                    studentApplication.status === 'INTERVIEW_SCHEDULED' 
-                      ? 'bg-purple-50 border-purple-300 text-purple-700'
-                      : studentApplication.status === 'ACCEPTED'
-                      ? 'bg-green-50 border-green-300 text-green-700'
-                      : studentApplication.status === 'REJECTED'
-                      ? 'bg-red-50 border-red-300 text-red-700'
-                      : 'bg-yellow-50 border-yellow-300 text-yellow-700'
-                  }`}>
-                    {studentApplication.status.replace(/_/g, ' ')}
+                  <div
+                    className={`px-4 py-2 rounded-xl border-2 font-semibold text-sm ${
+                      studentApplication.status === "INTERVIEW_SCHEDULED"
+                        ? "bg-purple-50 border-purple-300 text-purple-700"
+                        : studentApplication.status === "ACCEPTED"
+                        ? "bg-green-50 border-green-300 text-green-700"
+                        : studentApplication.status === "REJECTED"
+                        ? "bg-red-50 border-red-300 text-red-700"
+                        : "bg-yellow-50 border-yellow-300 text-yellow-700"
+                    }`}
+                  >
+                    {studentApplication.status.replace(/_/g, " ")}
                   </div>
                 )}
               </div>

@@ -1,15 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { 
-  User, 
-  Save, 
-  X, 
-  Upload, 
-  Camera, 
-  MapPin, 
-  Phone, 
-  Mail, 
-  Calendar, 
+import {
+  User,
+  Save,
+  X,
+  Upload,
+  Camera,
+  MapPin,
+  Phone,
+  Mail,
+  Calendar,
   Briefcase,
   GraduationCap,
   Star,
@@ -23,7 +23,7 @@ import {
   Info,
   ArrowLeft,
   Edit3,
-  Loader
+  Loader,
 } from "lucide-react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
@@ -37,7 +37,7 @@ const ProfileEditPage = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState("basic");
-  const [message, setMessage] = useState({ type: '', text: '' });
+  const [message, setMessage] = useState({ type: "", text: "" });
 
   // Form data states
   const [formData, setFormData] = useState({
@@ -56,9 +56,9 @@ const ProfileEditPage = () => {
     about: "",
     cvLink: "",
     availability: true,
-    preferredJobTypes: [],
+    // preferredJobTypes: [''],
     expectedSalaryMin: null,
-    expectedSalaryMax: null
+    expectedSalaryMax: null,
   });
 
   const [skills, setSkills] = useState([]);
@@ -72,21 +72,37 @@ const ProfileEditPage = () => {
     { id: "basic", label: "Basic Info", icon: User },
     { id: "skills", label: "Skills", icon: Star },
     { id: "experience", label: "Experience", icon: Briefcase },
-    { id: "links", label: "Links", icon: LinkIcon }
+    { id: "links", label: "Links", icon: LinkIcon },
   ];
 
-  const jobTypes = [
-    { value: "INTERNSHIP", label: "Internship" },
-    { value: "PART_TIME", label: "Part Time" },
-    { value: "FULL_TIME", label: "Full Time" },
-    { value: "CONTRACT", label: "Contract" },
-    { value: "FREELANCE", label: "Freelance" },
-    { value: "REMOTE", label: "Remote" }
-  ];
+//   const jobTypes = [
+//     { value: "INTERNSHIP", label: "Internship" },
+//     { value: "PART_TIME", label: "Part Time" },
+//     { value: "FULL_TIME", label: "Full Time" },
+//     { value: "CONTRACT", label: "Contract" },
+//     { value: "FREELANCE", label: "Freelance" },
+//     { value: "REMOTE", label: "Remote" },
+//   ];
 
   const skillLevels = ["Beginner", "Intermediate", "Advanced", "Expert"];
-  const linkTypes = ["Website", "LinkedIn", "GitHub", "Portfolio", "Twitter", "Instagram", "Behance", "Dribbble", "Other"];
-  const employmentTypes = ["Full-time", "Part-time", "Contract", "Freelance", "Internship"];
+  const linkTypes = [
+    "Website",
+    "LinkedIn",
+    "GitHub",
+    "Portfolio",
+    "Twitter",
+    "Instagram",
+    "Behance",
+    "Dribbble",
+    "Other",
+  ];
+  const employmentTypes = [
+    "Full-time",
+    "Part-time",
+    "Contract",
+    "Freelance",
+    "Internship",
+  ];
 
   // Effects
   useEffect(() => {
@@ -95,7 +111,7 @@ const ProfileEditPage = () => {
 
   useEffect(() => {
     if (message.text) {
-      const timer = setTimeout(() => setMessage({ type: '', text: '' }), 5000);
+      const timer = setTimeout(() => setMessage({ type: "", text: "" }), 5000);
       return () => clearTimeout(timer);
     }
   }, [message]);
@@ -108,13 +124,13 @@ const ProfileEditPage = () => {
       const response = await axios.get(
         "http://localhost:8080/api/Profiles/studentProfile",
         {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
 
       if (response.data.success) {
         const data = response.data.data;
-        
+
         // Set form data
         setFormData({
           // User fields
@@ -132,10 +148,14 @@ const ProfileEditPage = () => {
           about: data.student?.about || "",
           cvLink: data.student?.cvLink || "",
           availability: data.student?.availability !== false,
-          preferredJobTypes: Array.isArray(data.student?.preferredJobTypes) ? data.student.preferredJobTypes : [],
-          preferredLocations: Array.isArray(data.student?.preferredLocations) ? data.student.preferredLocations : [],
+        //   preferredJobTypes: Array.isArray(data.student?.preferredJobTypes)
+        //     ? data.student.preferredJobTypes
+        //     : [],
+          preferredLocations: Array.isArray(data.student?.preferredLocations)
+            ? data.student.preferredLocations
+            : [],
           expectedSalaryMin: data.student?.expectedSalaryMin || null,
-          expectedSalaryMax: data.student?.expectedSalaryMax || null
+          expectedSalaryMax: data.student?.expectedSalaryMax || null,
         });
 
         // Set other data
@@ -146,7 +166,7 @@ const ProfileEditPage = () => {
       }
     } catch (error) {
       console.error("Error fetching profile:", error);
-      setMessage({ type: 'error', text: 'Failed to load profile data' });
+      setMessage({ type: "error", text: "Failed to load profile data" });
     } finally {
       setLoading(false);
     }
@@ -155,11 +175,11 @@ const ProfileEditPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
-  
+
     try {
       const token = getToken();
       let response;
-  
+
       // Prepare the data to send
       const dataToSend = {
         // User fields
@@ -176,79 +196,104 @@ const ProfileEditPage = () => {
         about: formData.about,
         cvLink: formData.cvLink,
         availability: formData.availability,
-        preferredJobTypes: Array.isArray(formData.preferredJobTypes) ? formData.preferredJobTypes : [],
-        preferredLocations: Array.isArray(formData.preferredLocations) ? formData.preferredLocations : [],
+        // preferredJobTypes: Array.isArray(formData.preferredJobTypes)
+        //   ? formData.preferredJobTypes
+        //   : [],
+        preferredLocations: Array.isArray(formData.preferredLocations)
+          ? formData.preferredLocations
+          : [],
         expectedSalaryMin: formData.expectedSalaryMin,
         expectedSalaryMax: formData.expectedSalaryMax,
         // Related data
-        skills: skills.filter(skill => skill.name && skill.name.trim()),
-        experiences: experiences.filter(exp => exp.title && exp.title.trim()),
-        links: links.filter(link => link.url && link.url.trim())
+        skills: skills.filter((skill) => skill.name && skill.name.trim()),
+        experiences: experiences.filter((exp) => exp.title && exp.title.trim()),
+        links: links.filter((link) => link.url && link.url.trim()),
       };
-  
+
       if (selectedImage) {
         const formDataToSend = new FormData();
-        formDataToSend.append('image', selectedImage);
-        
+        formDataToSend.append("image", selectedImage);
+
         // Add each field individually
-        formDataToSend.append('fullName', dataToSend.fullName || '');
-        formDataToSend.append('phoneNumber', dataToSend.phoneNumber || '');
-        formDataToSend.append('location', dataToSend.location || '');
-        formDataToSend.append('background', dataToSend.background || '');
-        formDataToSend.append('university', dataToSend.university || '');
-        formDataToSend.append('major', dataToSend.major || '');
-        formDataToSend.append('about', dataToSend.about || '');
-        formDataToSend.append('cvLink', dataToSend.cvLink || '');
-        formDataToSend.append('availability', dataToSend.availability);
-        
+        formDataToSend.append("fullName", dataToSend.fullName || "");
+        formDataToSend.append("phoneNumber", dataToSend.phoneNumber || "");
+        formDataToSend.append("location", dataToSend.location || "");
+        formDataToSend.append("background", dataToSend.background || "");
+        formDataToSend.append("university", dataToSend.university || "");
+        formDataToSend.append("major", dataToSend.major || "");
+        formDataToSend.append("about", dataToSend.about || "");
+        formDataToSend.append("cvLink", dataToSend.cvLink || "");
+        formDataToSend.append("availability", dataToSend.availability);
+
         // Add numeric values only if they exist
-        if (dataToSend.year !== null) formDataToSend.append('year', dataToSend.year);
-        if (dataToSend.gpa !== null) formDataToSend.append('gpa', dataToSend.gpa);
-        if (dataToSend.age !== null) formDataToSend.append('age', dataToSend.age);
-        if (dataToSend.expectedSalaryMin !== null) formDataToSend.append('expectedSalaryMin', dataToSend.expectedSalaryMin);
-        if (dataToSend.expectedSalaryMax !== null) formDataToSend.append('expectedSalaryMax', dataToSend.expectedSalaryMax);
-        
+        if (dataToSend.year !== null)
+          formDataToSend.append("year", dataToSend.year);
+        if (dataToSend.gpa !== null)
+          formDataToSend.append("gpa", dataToSend.gpa);
+        if (dataToSend.age !== null)
+          formDataToSend.append("age", dataToSend.age);
+        if (dataToSend.expectedSalaryMin !== null)
+          formDataToSend.append(
+            "expectedSalaryMin",
+            dataToSend.expectedSalaryMin
+          );
+        if (dataToSend.expectedSalaryMax !== null)
+          formDataToSend.append(
+            "expectedSalaryMax",
+            dataToSend.expectedSalaryMax
+          );
+
         // Stringify arrays
-        formDataToSend.append('preferredJobTypes', JSON.stringify(dataToSend.preferredJobTypes));
-        formDataToSend.append('preferredLocations', JSON.stringify(dataToSend.preferredLocations));
-        formDataToSend.append('skills', JSON.stringify(dataToSend.skills));
-        formDataToSend.append('experiences', JSON.stringify(dataToSend.experiences));
-        formDataToSend.append('links', JSON.stringify(dataToSend.links));
-  
+        // formDataToSend.append(
+        //   "preferredJobTypes",
+        //   JSON.stringify(dataToSend.preferredJobTypes)
+        // );
+        formDataToSend.append(
+          "preferredLocations",
+          JSON.stringify(dataToSend.preferredLocations)
+        );
+        formDataToSend.append("skills", JSON.stringify(dataToSend.skills));
+        formDataToSend.append(
+          "experiences",
+          JSON.stringify(dataToSend.experiences)
+        );
+        formDataToSend.append("links", JSON.stringify(dataToSend.links));
+
         response = await axios.post(
-          'http://localhost:8080/api/Profiles/studentProfile/edit',
+          "http://localhost:8080/api/Profiles/studentProfile/edit",
           formDataToSend,
           {
-            headers: { 
+            headers: {
               Authorization: `Bearer ${token}`,
-              'Content-Type': 'multipart/form-data'
-            }
+              "Content-Type": "multipart/form-data",
+            },
           }
         );
       } else {
         // Use JSON when no image
         response = await axios.post(
-          'http://localhost:8080/api/Profiles/studentProfile/edit',
+          "http://localhost:8080/api/Profiles/studentProfile/edit",
           dataToSend,
           {
-            headers: { 
+            headers: {
               Authorization: `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            }
+              "Content-Type": "application/json",
+            },
           }
         );
       }
-  
+
       if (response.data.success) {
-        setMessage({ type: 'success', text: 'Profile updated successfully!' });
+        setMessage({ type: "success", text: "Profile updated successfully!" });
         setTimeout(() => {
-          navigate('student/dashboard/profile');
-        }, 1500);
+          navigate("/student/dashboard/profile");
+        }, 1000);
       }
     } catch (error) {
-      console.error('Error updating profile:', error);
-      const errorMessage = error.response?.data?.message || 'Failed to update profile';
-      setMessage({ type: 'error', text: errorMessage });
+      console.error("Error updating profile:", error);
+      const errorMessage =
+        error.response?.data?.message || "Failed to update profile";
+      setMessage({ type: "error", text: errorMessage });
     } finally {
       setSaving(false);
     }
@@ -256,31 +301,42 @@ const ProfileEditPage = () => {
 
   // Form handlers
   const handleInputChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleJobTypeChange = (jobType) => {
-    const currentTypes = Array.isArray(formData.preferredJobTypes) ? formData.preferredJobTypes : [];
-    if (currentTypes.includes(jobType)) {
-      handleInputChange("preferredJobTypes", currentTypes.filter(type => type !== jobType));
-    } else {
-      handleInputChange("preferredJobTypes", [...currentTypes, jobType]);
-    }
-  };
+//   const handleJobTypeChange = (jobType) => {
+//     setFormData((prev) => {
+//       const currentTypes = Array.isArray(prev.preferredJobTypes)
+//         ? prev.preferredJobTypes
+//         : [];
+      
+//       if (currentTypes.includes(jobType)) {
+//         return {
+//           ...prev,
+//           preferredJobTypes: currentTypes.filter((type) => type !== jobType)
+//         };
+//       } else {
+//         return {
+//           ...prev,
+//           preferredJobTypes: [...currentTypes, jobType]
+//         };
+//       }
+//     });
+//   };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        setMessage({ type: 'error', text: 'Image size must be less than 5MB' });
+        setMessage({ type: "error", text: "Image size must be less than 5MB" });
         return;
       }
-      
-      if (!file.type.startsWith('image/')) {
-        setMessage({ type: 'error', text: 'Please select a valid image file' });
+
+      if (!file.type.startsWith("image/")) {
+        setMessage({ type: "error", text: "Please select a valid image file" });
         return;
       }
-      
+
       setSelectedImage(file);
       const reader = new FileReader();
       reader.onload = () => {
@@ -292,11 +348,11 @@ const ProfileEditPage = () => {
 
   // Skills Management
   const addSkill = () => {
-    setSkills([...skills, { name: '', level: '', yearsOfExp: null }]);
+    setSkills([...skills, { name: "", level: "", yearsOfExp: null }]);
   };
 
   const updateSkill = (index, field, value) => {
-    const updatedSkills = skills.map((skill, i) => 
+    const updatedSkills = skills.map((skill, i) =>
       i === index ? { ...skill, [field]: value } : skill
     );
     setSkills(updatedSkills);
@@ -308,20 +364,23 @@ const ProfileEditPage = () => {
 
   // Experience Management
   const addExperience = () => {
-    setExperiences([...experiences, {
-      title: '',
-      companyName: '',
-      description: '',
-      location: '',
-      employmentType: '',
-      startDate: '',
-      endDate: '',
-      isCurrent: false
-    }]);
+    setExperiences([
+      ...experiences,
+      {
+        title: "",
+        companyName: "",
+        description: "",
+        location: "",
+        employmentType: "",
+        startDate: "",
+        endDate: "",
+        isCurrent: false,
+      },
+    ]);
   };
 
   const updateExperience = (index, field, value) => {
-    const updatedExperiences = experiences.map((exp, i) => 
+    const updatedExperiences = experiences.map((exp, i) =>
       i === index ? { ...exp, [field]: value } : exp
     );
     setExperiences(updatedExperiences);
@@ -333,11 +392,11 @@ const ProfileEditPage = () => {
 
   // Links Management
   const addLink = () => {
-    setLinks([...links, { type: 'Website', url: '', label: '' }]);
+    setLinks([...links, { type: "Website", url: "", label: "" }]);
   };
 
   const updateLink = (index, field, value) => {
-    const updatedLinks = links.map((link, i) => 
+    const updatedLinks = links.map((link, i) =>
       i === index ? { ...link, [field]: value } : link
     );
     setLinks(updatedLinks);
@@ -357,10 +416,10 @@ const ProfileEditPage = () => {
       formData.major,
       formData.about,
       skills.length > 0,
-      experiences.length > 0
+      experiences.length > 0,
     ];
-    
-    const filledFields = requiredFields.filter(field => field).length;
+
+    const filledFields = requiredFields.filter((field) => field).length;
     return Math.round((filledFields / requiredFields.length) * 100);
   };
 
@@ -379,7 +438,7 @@ const ProfileEditPage = () => {
   // Render tab content
   const renderTabContent = () => {
     switch (activeTab) {
-      case 'basic':
+      case "basic":
         return (
           <div className="space-y-8">
             {/* Profile Picture Section */}
@@ -391,8 +450,8 @@ const ProfileEditPage = () => {
               <div className="flex items-center gap-6">
                 <div className="relative group">
                   {imagePreview ? (
-                    <img 
-                      src={imagePreview} 
+                    <img
+                      src={imagePreview}
                       alt="Profile"
                       className="w-24 h-24 rounded-2xl object-cover shadow-lg border-4 border-white group-hover:scale-105 transition-transform duration-200"
                     />
@@ -401,7 +460,7 @@ const ProfileEditPage = () => {
                       <User className="w-12 h-12 text-gray-400" />
                     </div>
                   )}
-                  <button 
+                  <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
                     className="absolute inset-0 bg-black/50 text-white rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center"
@@ -446,7 +505,9 @@ const ProfileEditPage = () => {
                   <input
                     type="text"
                     value={formData.fullName}
-                    onChange={(e) => handleInputChange("fullName", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("fullName", e.target.value)
+                    }
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                     placeholder="Enter your full name"
                     required
@@ -463,7 +524,9 @@ const ProfileEditPage = () => {
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 cursor-not-allowed text-gray-600"
                     disabled
                   />
-                  <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Email cannot be changed
+                  </p>
                 </div>
 
                 <div>
@@ -473,7 +536,9 @@ const ProfileEditPage = () => {
                   <input
                     type="tel"
                     value={formData.phoneNumber}
-                    onChange={(e) => handleInputChange("phoneNumber", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("phoneNumber", e.target.value)
+                    }
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                     placeholder="Enter your phone number"
                   />
@@ -486,7 +551,9 @@ const ProfileEditPage = () => {
                   <input
                     type="text"
                     value={formData.location}
-                    onChange={(e) => handleInputChange("location", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("location", e.target.value)
+                    }
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                     placeholder="City, Country"
                   />
@@ -501,7 +568,12 @@ const ProfileEditPage = () => {
                     min="16"
                     max="100"
                     value={formData.age || ""}
-                    onChange={(e) => handleInputChange("age", e.target.value ? parseInt(e.target.value) : null)}
+                    onChange={(e) =>
+                      handleInputChange(
+                        "age",
+                        e.target.value ? parseInt(e.target.value) : null
+                      )
+                    }
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                     placeholder="Enter your age"
                   />
@@ -513,7 +585,12 @@ const ProfileEditPage = () => {
                   </label>
                   <select
                     value={formData.availability}
-                    onChange={(e) => handleInputChange("availability", e.target.value === "true")}
+                    onChange={(e) =>
+                      handleInputChange(
+                        "availability",
+                        e.target.value === "true"
+                      )
+                    }
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                   >
                     <option value={true}>Available for work</option>
@@ -550,7 +627,9 @@ const ProfileEditPage = () => {
                   <input
                     type="text"
                     value={formData.university}
-                    onChange={(e) => handleInputChange("university", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("university", e.target.value)
+                    }
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                     placeholder="Enter your university"
                     required
@@ -577,7 +656,12 @@ const ProfileEditPage = () => {
                   </label>
                   <select
                     value={formData.year || ""}
-                    onChange={(e) => handleInputChange("year", e.target.value ? parseInt(e.target.value) : null)}
+                    onChange={(e) =>
+                      handleInputChange(
+                        "year",
+                        e.target.value ? parseInt(e.target.value) : null
+                      )
+                    }
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                   >
                     <option value="">Select year</option>
@@ -600,7 +684,12 @@ const ProfileEditPage = () => {
                     min="0"
                     max="4.0"
                     value={formData.gpa || ""}
-                    onChange={(e) => handleInputChange("gpa", e.target.value ? parseFloat(e.target.value) : null)}
+                    onChange={(e) =>
+                      handleInputChange(
+                        "gpa",
+                        e.target.value ? parseFloat(e.target.value) : null
+                      )
+                    }
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                     placeholder="Enter your GPA"
                   />
@@ -613,7 +702,9 @@ const ProfileEditPage = () => {
                   <input
                     type="url"
                     value={formData.cvLink}
-                    onChange={(e) => handleInputChange("cvLink", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("cvLink", e.target.value)
+                    }
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                     placeholder="https://drive.google.com/..."
                   />
@@ -621,70 +712,85 @@ const ProfileEditPage = () => {
               </div>
 
               {/* Job Preferences */}
-              {/* Job Preferences */}
-<div className="mt-8 pt-8 border-t border-gray-200">
-  <h4 className="text-lg font-semibold text-gray-900 mb-6">Job Preferences</h4>
-  
-  <div className="mb-6">
-    <label className="block text-sm font-semibold text-gray-700 mb-3">
-      Preferred Job Types
-    </label>
-    <div className="flex flex-wrap gap-3">
-      {jobTypes.map(jobType => {
-        const isSelected = Array.isArray(formData.preferredJobTypes) && formData.preferredJobTypes.includes(jobType.value);
-        return (
-          <label 
-            key={jobType.value} 
-            className={`flex items-center px-4 py-2 rounded-xl border-2 cursor-pointer transition-all duration-200 ${
-              isSelected
-                ? 'bg-blue-50 border-blue-300 text-blue-700'
-                : 'bg-white border-gray-300 text-gray-700 hover:border-blue-300'
-            }`}
-          >
-            <input
-              type="checkbox"
-              checked={isSelected}
-              onChange={() => handleJobTypeChange(jobType.value)}
-              className="sr-only"
-            />
-            <span className="text-sm font-medium">{jobType.label}</span>
-          </label>
-        );
-      })}
-    </div>
-  </div>
+              {/* <div className="mt-8 pt-8 border-t border-gray-200">
+                <h4 className="text-lg font-semibold text-gray-900 mb-6">
+                  Job Preferences
+                </h4>
 
-  <div>
-    <label className="block text-sm font-semibold text-gray-700 mb-3">
-      Expected Salary Range (USD/month)
-    </label>
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div>
-        <input
-          type="number"
-          placeholder="Minimum salary"
-          value={formData.expectedSalaryMin || ""}
-          onChange={(e) => handleInputChange("expectedSalaryMin", e.target.value ? parseInt(e.target.value) : null)}
-          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-        />
-      </div>
-      <div>
-        <input
-          type="number"
-          placeholder="Maximum salary"
-          value={formData.expectedSalaryMax || ""}
-          onChange={(e) => handleInputChange("expectedSalaryMax", e.target.value ? parseInt(e.target.value) : null)}
-          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-        />
-      </div>
-    </div>
-  </div>
-</div>
+                <div className="mb-6">
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">
+                    Preferred Job Types
+                  </label>
+                  <div className="flex flex-wrap gap-3">
+                    {jobTypes.map((jobType) => {
+                      const isSelected =
+                        Array.isArray(formData.preferredJobTypes) &&
+                        formData.preferredJobTypes.includes(jobType.value);
+                      return (
+                        <label
+                          key={jobType.value}
+                          className={`flex items-center px-4 py-2 rounded-xl border-2 cursor-pointer transition-all duration-200 ${
+                            isSelected
+                              ? "bg-blue-50 border-blue-300 text-blue-700"
+                              : "bg-white border-gray-300 text-gray-700 hover:border-blue-300"
+                          }`}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={isSelected}
+                            onChange={() => handleJobTypeChange(jobType.value)}
+                            className="sr-only"
+                          />
+                          <span className="text-sm font-medium">
+                            {jobType.label}
+                          </span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-3">
+                    Expected Salary Range (USD/month)
+                  </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <input
+                        type="number"
+                        placeholder="Minimum salary"
+                        value={formData.expectedSalaryMin || ""}
+                        onChange={(e) =>
+                          handleInputChange(
+                            "expectedSalaryMin",
+                            e.target.value ? parseInt(e.target.value) : null
+                          )
+                        }
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                      />
+                    </div>
+                    <div>
+                      <input
+                        type="number"
+                        placeholder="Maximum salary"
+                        value={formData.expectedSalaryMax || ""}
+                        onChange={(e) =>
+                          handleInputChange(
+                            "expectedSalaryMax",
+                            e.target.value ? parseInt(e.target.value) : null
+                          )
+                        }
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div> */}
             </div>
           </div>
         );
 
-      case 'skills':
+      case "skills":
         return (
           <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
             <div className="flex items-center justify-between mb-6">
@@ -701,12 +807,16 @@ const ProfileEditPage = () => {
                 Add Skill
               </button>
             </div>
-            
+
             {skills.length === 0 ? (
               <div className="text-center py-12 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300">
                 <Star className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <h4 className="text-lg font-semibold text-gray-600 mb-2">No skills added yet</h4>
-                <p className="text-gray-500 mb-6">Add your technical and soft skills to showcase your expertise</p>
+                <h4 className="text-lg font-semibold text-gray-600 mb-2">
+                  No skills added yet
+                </h4>
+                <p className="text-gray-500 mb-6">
+                  Add your technical and soft skills to showcase your expertise
+                </p>
                 <button
                   type="button"
                   onClick={addSkill}
@@ -718,9 +828,14 @@ const ProfileEditPage = () => {
             ) : (
               <div className="space-y-4">
                 {skills.map((skill, index) => (
-                  <div key={index} className="bg-gray-50 rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow duration-200">
+                  <div
+                    key={index}
+                    className="bg-gray-50 rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow duration-200"
+                  >
                     <div className="flex items-center justify-between mb-4">
-                      <h4 className="font-semibold text-gray-900">Skill #{index + 1}</h4>
+                      <h4 className="font-semibold text-gray-900">
+                        Skill #{index + 1}
+                      </h4>
                       <button
                         type="button"
                         onClick={() => removeSkill(index)}
@@ -729,7 +844,7 @@ const ProfileEditPage = () => {
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -738,29 +853,35 @@ const ProfileEditPage = () => {
                         <input
                           type="text"
                           value={skill.name}
-                          onChange={(e) => updateSkill(index, 'name', e.target.value)}
+                          onChange={(e) =>
+                            updateSkill(index, "name", e.target.value)
+                          }
                           className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                           placeholder="e.g. JavaScript, React"
                           required
                         />
                       </div>
-                      
+
                       <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-2">
                           Proficiency Level
                         </label>
                         <select
                           value={skill.level}
-                          onChange={(e) => updateSkill(index, 'level', e.target.value)}
+                          onChange={(e) =>
+                            updateSkill(index, "level", e.target.value)
+                          }
                           className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                         >
                           <option value="">Select level</option>
-                          {skillLevels.map(level => (
-                            <option key={level} value={level}>{level}</option>
+                          {skillLevels.map((level) => (
+                            <option key={level} value={level}>
+                              {level}
+                            </option>
                           ))}
                         </select>
                       </div>
-                      
+
                       <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-2">
                           Years of Experience
@@ -770,7 +891,13 @@ const ProfileEditPage = () => {
                           min="0"
                           max="50"
                           value={skill.yearsOfExp || ""}
-                          onChange={(e) => updateSkill(index, 'yearsOfExp', e.target.value ? parseInt(e.target.value) : null)}
+                          onChange={(e) =>
+                            updateSkill(
+                              index,
+                              "yearsOfExp",
+                              e.target.value ? parseInt(e.target.value) : null
+                            )
+                          }
                           className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                           placeholder="Years"
                         />
@@ -783,7 +910,7 @@ const ProfileEditPage = () => {
           </div>
         );
 
-      case 'experience':
+      case "experience":
         return (
           <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
             <div className="flex items-center justify-between mb-6">
@@ -800,12 +927,16 @@ const ProfileEditPage = () => {
                 Add Experience
               </button>
             </div>
-            
+
             {experiences.length === 0 ? (
               <div className="text-center py-12 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300">
                 <Briefcase className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <h4 className="text-lg font-semibold text-gray-600 mb-2">No work experience added yet</h4>
-                <p className="text-gray-500 mb-6">Add your internships, part-time jobs, and volunteer work</p>
+                <h4 className="text-lg font-semibold text-gray-600 mb-2">
+                  No work experience added yet
+                </h4>
+                <p className="text-gray-500 mb-6">
+                  Add your internships, part-time jobs, and volunteer work
+                </p>
                 <button
                   type="button"
                   onClick={addExperience}
@@ -817,9 +948,14 @@ const ProfileEditPage = () => {
             ) : (
               <div className="space-y-6">
                 {experiences.map((experience, index) => (
-                  <div key={index} className="bg-gray-50 rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow duration-200">
+                  <div
+                    key={index}
+                    className="bg-gray-50 rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow duration-200"
+                  >
                     <div className="flex items-center justify-between mb-4">
-                      <h4 className="font-semibold text-gray-900">Experience #{index + 1}</h4>
+                      <h4 className="font-semibold text-gray-900">
+                        Experience #{index + 1}
+                      </h4>
                       <button
                         type="button"
                         onClick={() => removeExperience(index)}
@@ -828,7 +964,7 @@ const ProfileEditPage = () => {
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
-                    
+
                     <div className="space-y-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
@@ -838,13 +974,15 @@ const ProfileEditPage = () => {
                           <input
                             type="text"
                             value={experience.title}
-                            onChange={(e) => updateExperience(index, 'title', e.target.value)}
+                            onChange={(e) =>
+                              updateExperience(index, "title", e.target.value)
+                            }
                             className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                             placeholder="e.g. Frontend Developer"
                             required
                           />
                         </div>
-                        
+
                         <div>
                           <label className="block text-sm font-semibold text-gray-700 mb-2">
                             Company Name
@@ -852,7 +990,13 @@ const ProfileEditPage = () => {
                           <input
                             type="text"
                             value={experience.companyName}
-                            onChange={(e) => updateExperience(index, 'companyName', e.target.value)}
+                            onChange={(e) =>
+                              updateExperience(
+                                index,
+                                "companyName",
+                                e.target.value
+                              )
+                            }
                             className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                             placeholder="e.g. Google"
                           />
@@ -867,24 +1011,38 @@ const ProfileEditPage = () => {
                           <input
                             type="text"
                             value={experience.location}
-                            onChange={(e) => updateExperience(index, 'location', e.target.value)}
+                            onChange={(e) =>
+                              updateExperience(
+                                index,
+                                "location",
+                                e.target.value
+                              )
+                            }
                             className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                             placeholder="e.g. New York, NY"
                           />
                         </div>
-                        
+
                         <div>
                           <label className="block text-sm font-semibold text-gray-700 mb-2">
                             Employment Type
                           </label>
                           <select
                             value={experience.employmentType}
-                            onChange={(e) => updateExperience(index, 'employmentType', e.target.value)}
+                            onChange={(e) =>
+                              updateExperience(
+                                index,
+                                "employmentType",
+                                e.target.value
+                              )
+                            }
                             className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                           >
                             <option value="">Select type</option>
-                            {employmentTypes.map(type => (
-                              <option key={type} value={type}>{type}</option>
+                            {employmentTypes.map((type) => (
+                              <option key={type} value={type}>
+                                {type}
+                              </option>
                             ))}
                           </select>
                         </div>
@@ -898,12 +1056,18 @@ const ProfileEditPage = () => {
                           <input
                             type="date"
                             value={experience.startDate}
-                            onChange={(e) => updateExperience(index, 'startDate', e.target.value)}
+                            onChange={(e) =>
+                              updateExperience(
+                                index,
+                                "startDate",
+                                e.target.value
+                              )
+                            }
                             className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                             required
                           />
                         </div>
-                        
+
                         <div>
                           <label className="block text-sm font-semibold text-gray-700 mb-2">
                             End Date
@@ -911,7 +1075,9 @@ const ProfileEditPage = () => {
                           <input
                             type="date"
                             value={experience.endDate}
-                            onChange={(e) => updateExperience(index, 'endDate', e.target.value)}
+                            onChange={(e) =>
+                              updateExperience(index, "endDate", e.target.value)
+                            }
                             disabled={experience.isCurrent}
                             className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed transition-all duration-200"
                           />
@@ -924,14 +1090,20 @@ const ProfileEditPage = () => {
                             type="checkbox"
                             checked={experience.isCurrent}
                             onChange={(e) => {
-                              updateExperience(index, 'isCurrent', e.target.checked);
+                              updateExperience(
+                                index,
+                                "isCurrent",
+                                e.target.checked
+                              );
                               if (e.target.checked) {
-                                updateExperience(index, 'endDate', '');
+                                updateExperience(index, "endDate", "");
                               }
                             }}
                             className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 w-4 h-4"
                           />
-                          <span className="text-sm font-medium text-gray-700">I currently work here</span>
+                          <span className="text-sm font-medium text-gray-700">
+                            I currently work here
+                          </span>
                         </label>
                       </div>
 
@@ -942,7 +1114,13 @@ const ProfileEditPage = () => {
                         <textarea
                           rows={4}
                           value={experience.description}
-                          onChange={(e) => updateExperience(index, 'description', e.target.value)}
+                          onChange={(e) =>
+                            updateExperience(
+                              index,
+                              "description",
+                              e.target.value
+                            )
+                          }
                           className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all duration-200"
                           placeholder="Describe your responsibilities and achievements..."
                         />
@@ -955,7 +1133,7 @@ const ProfileEditPage = () => {
           </div>
         );
 
-      case 'links':
+      case "links":
         return (
           <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
             <div className="flex items-center justify-between mb-6">
@@ -972,12 +1150,17 @@ const ProfileEditPage = () => {
                 Add Link
               </button>
             </div>
-            
+
             {links.length === 0 ? (
               <div className="text-center py-12 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300">
                 <LinkIcon className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                <h4 className="text-lg font-semibold text-gray-600 mb-2">No professional links added yet</h4>
-                <p className="text-gray-500 mb-6">Add your portfolio, LinkedIn, GitHub, and other professional profiles</p>
+                <h4 className="text-lg font-semibold text-gray-600 mb-2">
+                  No professional links added yet
+                </h4>
+                <p className="text-gray-500 mb-6">
+                  Add your portfolio, LinkedIn, GitHub, and other professional
+                  profiles
+                </p>
                 <button
                   type="button"
                   onClick={addLink}
@@ -989,9 +1172,14 @@ const ProfileEditPage = () => {
             ) : (
               <div className="space-y-4">
                 {links.map((link, index) => (
-                  <div key={index} className="bg-gray-50 rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow duration-200">
+                  <div
+                    key={index}
+                    className="bg-gray-50 rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow duration-200"
+                  >
                     <div className="flex items-center justify-between mb-4">
-                      <h4 className="font-semibold text-gray-900">Link #{index + 1}</h4>
+                      <h4 className="font-semibold text-gray-900">
+                        Link #{index + 1}
+                      </h4>
                       <button
                         type="button"
                         onClick={() => removeLink(index)}
@@ -1000,7 +1188,7 @@ const ProfileEditPage = () => {
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -1008,15 +1196,19 @@ const ProfileEditPage = () => {
                         </label>
                         <select
                           value={link.type}
-                          onChange={(e) => updateLink(index, 'type', e.target.value)}
+                          onChange={(e) =>
+                            updateLink(index, "type", e.target.value)
+                          }
                           className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                         >
-                          {linkTypes.map(type => (
-                            <option key={type} value={type}>{type}</option>
+                          {linkTypes.map((type) => (
+                            <option key={type} value={type}>
+                              {type}
+                            </option>
                           ))}
                         </select>
                       </div>
-                      
+
                       <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-2">
                           URL <span className="text-red-500">*</span>
@@ -1024,13 +1216,15 @@ const ProfileEditPage = () => {
                         <input
                           type="url"
                           value={link.url}
-                          onChange={(e) => updateLink(index, 'url', e.target.value)}
+                          onChange={(e) =>
+                            updateLink(index, "url", e.target.value)
+                          }
                           className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                           placeholder="https://example.com"
                           required
                         />
                       </div>
-                      
+
                       <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-2">
                           Display Label
@@ -1038,7 +1232,9 @@ const ProfileEditPage = () => {
                         <input
                           type="text"
                           value={link.label}
-                          onChange={(e) => updateLink(index, 'label', e.target.value)}
+                          onChange={(e) =>
+                            updateLink(index, "label", e.target.value)
+                          }
                           className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                           placeholder="Optional custom label"
                         />
@@ -1065,8 +1261,8 @@ const ProfileEditPage = () => {
             <div className="flex items-center gap-6">
               <div className="relative">
                 {imagePreview ? (
-                  <img 
-                    src={imagePreview} 
+                  <img
+                    src={imagePreview}
                     alt="Profile"
                     className="w-20 h-20 rounded-2xl object-cover shadow-xl border-4 border-white/20"
                   />
@@ -1076,13 +1272,17 @@ const ProfileEditPage = () => {
                   </div>
                 )}
               </div>
-              
+
               <div className="text-white">
-                <h1 className="text-3xl lg:text-4xl font-bold mb-2">Edit Profile</h1>
-                <p className="text-blue-100 mb-3">Update your information to attract better opportunities</p>
-                
+                <h1 className="text-3xl lg:text-4xl font-bold mb-2">
+                  Edit Profile
+                </h1>
+                <p className="text-blue-100 mb-3">
+                  Update your information to attract better opportunities
+                </p>
+
                 <div className="bg-white/20 rounded-full h-3 w-64 mb-2">
-                  <div 
+                  <div
                     className="bg-gradient-to-r from-green-400 to-green-500 h-3 rounded-full transition-all duration-500"
                     style={{ width: `${getCompletionPercentage()}%` }}
                   ></div>
@@ -1092,10 +1292,10 @@ const ProfileEditPage = () => {
                 </p>
               </div>
             </div>
-            
+
             <div className="flex gap-3">
               <RouterLink
-                to="/student/profile"
+                to="/student/dashboard/profile"
                 className="bg-white/10 backdrop-blur-sm text-white border border-white/20 px-6 py-3 rounded-xl hover:bg-white/20 transition-all duration-200 flex items-center gap-2"
               >
                 <ArrowLeft className="w-5 h-5" />
@@ -1126,19 +1326,21 @@ const ProfileEditPage = () => {
       <div className="max-w-6xl mx-auto px-6 py-8">
         {/* Status Messages */}
         {message.text && (
-          <div className={`mb-6 p-4 rounded-xl flex items-center gap-3 shadow-lg animate-fade-in ${
-            message.type === 'success' 
-              ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' 
-              : 'bg-red-50 text-red-800 border border-red-200'
-          }`}>
-            {message.type === 'success' ? (
+          <div
+            className={`mb-6 p-4 rounded-xl flex items-center gap-3 shadow-lg animate-fade-in ${
+              message.type === "success"
+                ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
+                : "bg-red-50 text-red-800 border border-red-200"
+            }`}
+          >
+            {message.type === "success" ? (
               <CheckCircle className="w-5 h-5" />
             ) : (
               <AlertCircle className="w-5 h-5" />
             )}
             <span className="font-medium">{message.text}</span>
             <button
-              onClick={() => setMessage({ type: '', text: '' })}
+              onClick={() => setMessage({ type: "", text: "" })}
               className="ml-auto text-gray-500 hover:text-gray-700"
             >
               <X className="w-4 h-4" />
@@ -1158,8 +1360,8 @@ const ProfileEditPage = () => {
                     onClick={() => setActiveTab(tab.id)}
                     className={`flex-1 min-w-0 px-6 py-4 text-sm font-semibold transition-all duration-200 ${
                       activeTab === tab.id
-                        ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50'
-                        : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
+                        ? "text-blue-600 border-b-2 border-blue-600 bg-blue-50"
+                        : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
                     }`}
                   >
                     <div className="flex items-center justify-center gap-2">
@@ -1172,9 +1374,7 @@ const ProfileEditPage = () => {
             </div>
 
             {/* Tab Content */}
-            <form onSubmit={handleSubmit}>
-              {renderTabContent()}
-            </form>
+            <form onSubmit={handleSubmit}>{renderTabContent()}</form>
           </div>
 
           {/* Sidebar */}
@@ -1187,7 +1387,7 @@ const ProfileEditPage = () => {
               </h3>
               <div className="space-y-4">
                 <div className="bg-gray-200 rounded-full h-3 overflow-hidden">
-                  <div 
+                  <div
                     className="bg-gradient-to-r from-blue-500 to-green-500 h-full rounded-full transition-all duration-500"
                     style={{ width: `${getCompletionPercentage()}%` }}
                   ></div>
@@ -1195,41 +1395,69 @@ const ProfileEditPage = () => {
                 <p className="text-center font-semibold text-gray-900">
                   {getCompletionPercentage()}% Complete
                 </p>
-                
+
                 <div className="space-y-2 text-sm">
                   <div className="flex items-center gap-2">
-                    {formData.fullName && formData.university && formData.major ? 
-                      <CheckCircle className="w-4 h-4 text-green-500" /> : 
+                    {formData.fullName &&
+                    formData.university &&
+                    formData.major ? (
+                      <CheckCircle className="w-4 h-4 text-green-500" />
+                    ) : (
                       <AlertCircle className="w-4 h-4 text-gray-400" />
-                    }
-                    <span className={formData.fullName && formData.university && formData.major ? 'text-gray-900' : 'text-gray-500'}>
+                    )}
+                    <span
+                      className={
+                        formData.fullName &&
+                        formData.university &&
+                        formData.major
+                          ? "text-gray-900"
+                          : "text-gray-500"
+                      }
+                    >
                       Basic Information
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    {skills.length > 0 ? 
-                      <CheckCircle className="w-4 h-4 text-green-500" /> : 
+                    {skills.length > 0 ? (
+                      <CheckCircle className="w-4 h-4 text-green-500" />
+                    ) : (
                       <AlertCircle className="w-4 h-4 text-gray-400" />
-                    }
-                    <span className={skills.length > 0 ? 'text-gray-900' : 'text-gray-500'}>
+                    )}
+                    <span
+                      className={
+                        skills.length > 0 ? "text-gray-900" : "text-gray-500"
+                      }
+                    >
                       Skills ({skills.length})
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    {experiences.length > 0 ? 
-                      <CheckCircle className="w-4 h-4 text-green-500" /> : 
+                    {experiences.length > 0 ? (
+                      <CheckCircle className="w-4 h-4 text-green-500" />
+                    ) : (
                       <AlertCircle className="w-4 h-4 text-gray-400" />
-                    }
-                    <span className={experiences.length > 0 ? 'text-gray-900' : 'text-gray-500'}>
+                    )}
+                    <span
+                      className={
+                        experiences.length > 0
+                          ? "text-gray-900"
+                          : "text-gray-500"
+                      }
+                    >
                       Experience ({experiences.length})
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    {formData.about ? 
-                      <CheckCircle className="w-4 h-4 text-green-500" /> : 
+                    {formData.about ? (
+                      <CheckCircle className="w-4 h-4 text-green-500" />
+                    ) : (
                       <AlertCircle className="w-4 h-4 text-gray-400" />
-                    }
-                    <span className={formData.about ? 'text-gray-900' : 'text-gray-500'}>
+                    )}
+                    <span
+                      className={
+                        formData.about ? "text-gray-900" : "text-gray-500"
+                      }
+                    >
                       About Section
                     </span>
                   </div>
@@ -1300,8 +1528,14 @@ const ProfileEditPage = () => {
 
       <style jsx>{`
         @keyframes fade-in {
-          from { opacity: 0; transform: translateY(-10px); }
-          to { opacity: 1; transform: translateY(0); }
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
         .animate-fade-in {
           animation: fade-in 0.3s ease-out;
