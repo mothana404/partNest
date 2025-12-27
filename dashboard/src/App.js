@@ -40,6 +40,20 @@ function App() {
     );
   }
 
+  // Helper function to get default route based on role
+  const getDefaultRoute = (role) => {
+    switch(role?.toLowerCase()) {
+      case 'admin':
+        return '/admin/dashboard/users';
+      case 'company':
+        return '/company/dashboard';
+      case 'student':
+        return '/student/dashboard';
+      default:
+        return '/login';
+    }
+  };
+
   return (
     <div className="App">
       <Routes>
@@ -50,7 +64,7 @@ function App() {
             <Navigate
               to={
                 isAuthenticated() && user
-                  ? `/${user.role.toLowerCase()}/dashboard`
+                  ? getDefaultRoute(user.role)
                   : "/login"
               }
               replace
@@ -63,7 +77,7 @@ function App() {
           path="/login"
           element={
             isAuthenticated() && user ? (
-              <Navigate to={`/${user.role.toLowerCase()}/dashboard`} replace />
+              <Navigate to={getDefaultRoute(user.role)} replace />
             ) : (
               <LoginPage />
             )
@@ -75,7 +89,7 @@ function App() {
           path="/register/student"
           element={
             isAuthenticated() && user ? (
-              <Navigate to={`/${user.role.toLowerCase()}/dashboard`} replace />
+              <Navigate to={getDefaultRoute(user.role)} replace />
             ) : (
               <RegisterStudent />
             )
@@ -86,7 +100,7 @@ function App() {
           path="/register/company"
           element={
             isAuthenticated() && user ? (
-              <Navigate to={`/${user.role.toLowerCase()}/dashboard`} replace />
+              <Navigate to={getDefaultRoute(user.role)} replace />
             ) : (
               <RegisterCompany />
             )
@@ -102,7 +116,6 @@ function App() {
             </ProtectedRoute>
           }
         >
-          {/* Student routes */}
           <Route path="dashboard" element={<DashboardHomePage />} />
           <Route path="dashboard/jobs" element={<BrowseJobsPage />} />
           <Route
@@ -111,11 +124,7 @@ function App() {
           />
           <Route path="dashboard/saved" element={<SavedJobsPage />} />
           <Route path="profile/edit" element={<ProfileEditPage />} />
-          <Route
-            path="dashboard/profile"
-            element={<ProfilePage />}
-          />
-          {/* Add more student routes as needed */}
+          <Route path="dashboard/profile" element={<ProfilePage />} />
         </Route>
 
         {/* Protected Routes - Company */}
@@ -132,9 +141,9 @@ function App() {
           <Route path="dashboard/candidates" element={<CandidatesPage />} />
           <Route path="dashboard/profile" element={<CompanyProfile />} />
           <Route path="dashboard/interviews" element={<InterviewsPage />} />
-
         </Route>
 
+        {/* Protected Routes - Admin */}
         <Route
           path="/admin/*"
           element={
@@ -143,11 +152,13 @@ function App() {
             </ProtectedRoute>
           }
         >
-           <Route path="dashboard/users" element={<AdminUsers />} />
-           <Route path="dashboard/categories" element={<AdminCategories />} />
-           <Route path="dashboard/jobs" element={<AdminJobs />} />
-           <Route path="dashboard/applications" element={<AdminApplicationsPage />} />
-           <Route path="dashboard/companies" element={<AdminCompaniesPage />} />
+          {/* Redirect /admin/dashboard to /admin/dashboard/users */}
+          <Route path="dashboard" element={<Navigate to="/admin/dashboard/users" replace />} />
+          <Route path="dashboard/users" element={<AdminUsers />} />
+          <Route path="dashboard/categories" element={<AdminCategories />} />
+          <Route path="dashboard/jobs" element={<AdminJobs />} />
+          <Route path="dashboard/applications" element={<AdminApplicationsPage />} />
+          <Route path="dashboard/companies" element={<AdminCompaniesPage />} />
         </Route>
 
         {/* 404 Not Found */}

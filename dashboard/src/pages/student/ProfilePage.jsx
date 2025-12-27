@@ -205,7 +205,7 @@ const ProfilePage = () => {
                   <User className="w-6 h-6 text-blue-600" />
                   About Me
                 </h2>
-                <p className="text-gray-700 leading-relaxed text-lg whitespace-pre-wrap">
+                <p className="text-gray-700 leading-relaxed text-lg whitespace-pre-wrap break-all">
                   {profileData.student.about}
                 </p>
               </div>
@@ -561,7 +561,7 @@ const ProfilePage = () => {
             </div>
 
             {/* Quick Actions */}
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+            {/* <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
               <h3 className="text-lg font-bold text-gray-900 mb-4">Quick Actions</h3>
               <div className="space-y-2">
                 <RouterLink
@@ -580,7 +580,7 @@ const ProfilePage = () => {
                   Privacy Settings
                 </button>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

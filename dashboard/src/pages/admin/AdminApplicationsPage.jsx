@@ -2,12 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { 
   Calendar,
   Users,
-  CheckCircle,
-  XCircle,
   Clock,
   TrendingUp,
-  Download,
-  Eye
 } from 'lucide-react';
 import ApplicationsTable from '../../components/adminApplications/ApplicationsTable';
 import ApplicationDetails from '../../components/adminApplications/ApplicationDetails';
@@ -227,10 +223,6 @@ const AdminApplicationsPage = () => {
                     <Button onClick={() => setCurrentView('analytics')}>
                       <TrendingUp className="w-4 h-4 mr-2" />
                       Analytics
-                    </Button>
-                    <Button>
-                      <Download className="w-4 h-4 mr-2" />
-                      Export
                     </Button>
                   </div>
                 </div>

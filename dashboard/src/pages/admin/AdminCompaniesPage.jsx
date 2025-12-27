@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { 
   Building,
   Users,
   CheckCircle,
-  XCircle,
   Calendar,
   TrendingUp,
-  Download,
-  Eye
 } from 'lucide-react';
 import { useCompanies } from '../../hooks/useCompanies';
 import CompanyDetails from '../../components/adminCompany/CompanyDetails';
@@ -16,40 +13,104 @@ import CompanyFilters from '../../components/adminCompany/CompanyFilters';
 import CompaniesTable from '../../components/adminCompany/CompaniesTable';
 
 const AdminCompaniesPage = () => {
-  const [currentView, setCurrentView] = useState('list'); // 'list', 'details', 'stats'
+  const [currentView, setCurrentView] = useState('list');
   const [selectedCompany, setSelectedCompany] = useState(null);
-  const [filters, setFilters] = useState({
-    search: '',
-    isVerified: '',
-    isActive: '',
-    industry: '',
-    page: 1,
-    limit: 10
-  });
+  
+  // Separate state for each filter - prevents unnecessary re-renders
+  const [searchInput, setSearchInput] = useState('');
+  const [verifiedFilter, setVerifiedFilter] = useState('');
+  const [activeFilter, setActiveFilter] = useState('');
+  const [industryFilter, setIndustryFilter] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const {
-    companies,
+    allCompanies,
     loading,
-    pagination,
     stats,
-    fetchCompanies,
+    fetchAllCompanies,
     fetchStats,
     verifyCompany,
     toggleCompanyStatus,
     deleteCompany
   } = useCompanies();
 
+  // Fetch all companies when server filters change (not search)
   useEffect(() => {
-    fetchCompanies(filters);
+    const serverFilters = {
+      isVerified: verifiedFilter,
+      isActive: activeFilter,
+      industry: industryFilter
+    };
+    fetchAllCompanies(serverFilters);
+  }, [verifiedFilter, activeFilter, industryFilter, fetchAllCompanies]);
+
+  // Fetch stats once on mount
+  useEffect(() => {
     fetchStats();
-  }, [filters]);
+  }, [fetchStats]);
+
+  // Client-side filtering with useMemo - prevents re-renders
+  const { paginatedCompanies, pagination } = useMemo(() => {
+    let filtered = [...allCompanies];
+
+    // Apply search filter (client-side)
+    if (searchInput) {
+      const searchLower = searchInput.toLowerCase();
+      filtered = filtered.filter(company => 
+        company.companyName?.toLowerCase().includes(searchLower) ||
+        company.industry?.toLowerCase().includes(searchLower) ||
+        company.user?.email?.toLowerCase().includes(searchLower) ||
+        company.user?.fullName?.toLowerCase().includes(searchLower)
+      );
+    }
+
+    // Pagination
+    const totalItems = filtered.length;
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const paginated = filtered.slice(startIndex, startIndex + itemsPerPage);
+
+    return {
+      paginatedCompanies: paginated,
+      pagination: {
+        currentPage,
+        totalPages,
+        totalItems,
+        itemsPerPage
+      }
+    };
+  }, [allCompanies, searchInput, currentPage, itemsPerPage]);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchInput, verifiedFilter, activeFilter, industryFilter]);
 
   const handleFilterChange = (key, value) => {
-    setFilters(prev => ({
-      ...prev,
-      [key]: value,
-      page: 1 // Reset page when filters change
-    }));
+    switch(key) {
+      case 'search':
+        setSearchInput(value);
+        break;
+      case 'isVerified':
+        setVerifiedFilter(value);
+        break;
+      case 'isActive':
+        setActiveFilter(value);
+        break;
+      case 'industry':
+        setIndustryFilter(value);
+        break;
+      case 'limit':
+        setItemsPerPage(value);
+        setCurrentPage(1);
+        break;
+      case 'page':
+        setCurrentPage(value);
+        break;
+      default:
+        break;
+    }
   };
 
   const handleViewCompany = (company) => {
@@ -58,33 +119,18 @@ const AdminCompaniesPage = () => {
   };
 
   const handleVerifyCompany = async (companyId, isVerified) => {
-    try {
-      await verifyCompany(companyId, isVerified);
-      fetchCompanies(filters); // Refresh data
-      fetchStats(); // Refresh stats
-    } catch (error) {
-      console.error('Error verifying company:', error);
-    }
+    await verifyCompany(companyId, isVerified);
+    await fetchStats();
   };
 
   const handleToggleStatus = async (companyId) => {
-    try {
-      await toggleCompanyStatus(companyId);
-      fetchCompanies(filters); // Refresh data
-      fetchStats(); // Refresh stats
-    } catch (error) {
-      console.error('Error toggling company status:', error);
-    }
+    await toggleCompanyStatus(companyId);
+    await fetchStats();
   };
 
   const handleDelete = async (companyId) => {
-    try {
-      await deleteCompany(companyId);
-      fetchCompanies(filters); // Refresh data
-      fetchStats(); // Refresh stats
-    } catch (error) {
-      console.error('Error deleting company:', error);
-    }
+    await deleteCompany(companyId);
+    await fetchStats();
   };
 
   // UI Components
@@ -225,21 +271,23 @@ const AdminCompaniesPage = () => {
                       <TrendingUp className="w-4 h-4 mr-2" />
                       Statistics
                     </Button>
-                    <Button>
-                      <Download className="w-4 h-4 mr-2" />
-                      Export
-                    </Button>
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
                 <CompanyFilters
-                  filters={filters}
+                  filters={{
+                    search: searchInput,
+                    isVerified: verifiedFilter,
+                    isActive: activeFilter,
+                    industry: industryFilter,
+                    limit: itemsPerPage
+                  }}
                   onFilterChange={handleFilterChange}
                 />
 
                 <CompaniesTable
-                  companies={companies}
+                  companies={paginatedCompanies}
                   loading={loading}
                   onViewCompany={handleViewCompany}
                   onVerifyCompany={handleVerifyCompany}

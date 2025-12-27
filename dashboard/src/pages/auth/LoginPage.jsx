@@ -30,6 +30,8 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const from = location.state?.from?.pathname || '/dashboard';
+  // Redirect admins to the admin users page
+  const adminFrom = '/admin/dashboard/users';
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -83,8 +85,13 @@ const LoginPage = () => {
       const { data } = response;
 
       if (data.success) {
+        console.log('Login successful:', data);
         login(data.data.user, data.data.accessToken);
-        navigate(from, { replace: true });
+        if (data.data.user.role === 'ADMIN') {
+          navigate(adminFrom, { replace: true });
+        } else {
+          navigate(from, { replace: true });
+        }
       } else {
         throw new Error(data.message || 'Login failed');
       }

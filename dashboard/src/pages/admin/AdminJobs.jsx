@@ -243,35 +243,35 @@ const AdminJobs = () => {
     }
   };
 
-  const handleExportCSV = async () => {
-    try {
-      const token = getToken();
-      const queryParams = new URLSearchParams(
-        Object.fromEntries(
-          Object.entries(filters).filter(([_, value]) => value !== '' && value !== 'all')
-        )
-      );
+//   const handleExportCSV = async () => {
+//     try {
+//       const token = getToken();
+//       const queryParams = new URLSearchParams(
+//         Object.fromEntries(
+//           Object.entries(filters).filter(([_, value]) => value !== '' && value !== 'all')
+//         )
+//       );
 
-      const response = await axios.get(
-        `http://localhost:8080/api/admin/jobs/export/csv?${queryParams}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-          responseType: 'blob'
-        }
-      );
+//       const response = await axios.get(
+//         `http://localhost:8080/api/admin/jobs/export/csv?${queryParams}`,
+//         {
+//           headers: { Authorization: `Bearer ${token}` },
+//           responseType: 'blob'
+//         }
+//       );
 
-      const blob = new Blob([response.data], { type: 'text/csv' });
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', `jobs-export-${Date.now()}.csv`);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-    } catch (error) {
-      console.error('Error exporting CSV:', error);
-    }
-  };
+//       const blob = new Blob([response.data], { type: 'text/csv' });
+//       const url = window.URL.createObjectURL(blob);
+//       const link = document.createElement('a');
+//       link.href = url;
+//       link.setAttribute('download', `jobs-export-${Date.now()}.csv`);
+//       document.body.appendChild(link);
+//       link.click();
+//       link.remove();
+//     } catch (error) {
+//       console.error('Error exporting CSV:', error);
+//     }
+//   };
 
   const toggleSelectJob = (jobId) => {
     setSelectedJobs(prev =>
@@ -346,13 +346,13 @@ const AdminJobs = () => {
             </div>
 
             <div className="flex items-center gap-3">
-              <button
+              {/* <button
                 onClick={handleExportCSV}
                 className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-2"
               >
                 <Download className="w-4 h-4" />
                 Export CSV
-              </button>
+              </button> */}
               
               <button
                 onClick={() => setShowFilters(!showFilters)}

@@ -9,7 +9,6 @@ const adminCompaniesController = {
       const {
         page = 1,
         limit = 10,
-        search,
         isVerified,
         isActive,
         industry,
@@ -20,15 +19,6 @@ const adminCompaniesController = {
       const offset = (page - 1) * limit;
       const whereClause = {};
       const userWhereClause = {};
-
-      // Apply filters
-      if (search) {
-        whereClause[Op.or] = [
-          { companyName: { [Op.iLike]: `%${search}%` } },
-          { industry: { [Op.iLike]: `%${search}%` } },
-          { contactEmail: { [Op.iLike]: `%${search}%` } }
-        ];
-      }
 
       if (isVerified !== undefined) {
         whereClause.isVerified = isVerified === 'true';

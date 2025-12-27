@@ -28,7 +28,7 @@ const ApplicationDetails = ({
     application?.interviewDate ? new Date(application.interviewDate).toISOString().slice(0, 16) : ''
   );
   const [interviewType, setInterviewType] = useState(application?.interviewType || '');
-  const [interviewNotes, setInterviewNotes] = useState(application?.interviewNotes || '');
+//   const [interviewNotes, setInterviewNotes] = useState(application?.interviewNotes || '');
 
   const handleStatusUpdate = () => {
     const updateData = {
@@ -37,7 +37,6 @@ const ApplicationDetails = ({
       rejectionReason,
       interviewDate: interviewDate ? new Date(interviewDate) : null,
       interviewType,
-      interviewNotes
     };
 
     onStatusUpdate(application.id, newStatus, updateData);
@@ -333,7 +332,7 @@ const ApplicationDetails = ({
                   <SelectOption value="">Select Status</SelectOption>
                   <SelectOption value="PENDING">Pending</SelectOption>
                   <SelectOption value="REVIEWED">Reviewed</SelectOption>
-                  <SelectOption value="INTERVIEW_SCHEDULED">Interview Scheduled</SelectOption>
+                  {/* <SelectOption value="INTERVIEW_SCHEDULED">Interview Scheduled</SelectOption> */}
                   <SelectOption value="ACCEPTED">Accepted</SelectOption>
                   <SelectOption value="REJECTED">Rejected</SelectOption>
                   <SelectOption value="WITHDRAWN">Withdrawn</SelectOption>
@@ -360,7 +359,7 @@ const ApplicationDetails = ({
                       <SelectOption value="In-person">In-person Interview</SelectOption>
                     </Select>
                   </div>
-                  <div>
+                  {/* <div>
                     <label className="block text-sm font-medium mb-2">Interview Notes</label>
                     <Textarea
                       value={interviewNotes}
@@ -368,10 +367,10 @@ const ApplicationDetails = ({
                       placeholder="Interview notes..."
                       rows={3}
                     />
-                  </div>
+                  </div> */}
                 </>
               )}
-
+{/* 
               {newStatus === 'REJECTED' && (
                 <div>
                   <label className="block text-sm font-medium mb-2">Rejection Reason</label>
@@ -384,7 +383,7 @@ const ApplicationDetails = ({
                     <SelectOption value="Other">Other</SelectOption>
                   </Select>
                 </div>
-              )}
+              )} */}
 
               <div>
                 <label className="block text-sm font-medium mb-2">Feedback</label>
@@ -447,7 +446,7 @@ const ApplicationDetails = ({
                   </div>
                 )}
 
-                {application.interviewDate && (
+                {/* {application.interviewDate && (
                   <div className="flex items-center gap-3">
                     <div className="w-2 h-2 rounded-full bg-orange-600"></div>
                     <div>
@@ -457,7 +456,7 @@ const ApplicationDetails = ({
                       </p>
                     </div>
                   </div>
-                )}
+                )} */}
               </div>
             </CardContent>
           </Card>

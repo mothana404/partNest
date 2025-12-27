@@ -279,7 +279,7 @@ const RegisterCompany = () => {
                         className={`w-full pl-10 pr-3 py-3 bg-gray-50 border rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
                           errors.fullName ? "border-red-300" : "border-gray-200"
                         }`}
-                        placeholder="John Doe"
+                        placeholder="tech innovators ltd."
                       />
                     </div>
                     {errors.fullName && (
@@ -330,7 +330,7 @@ const RegisterCompany = () => {
                           className={`w-full pl-10 pr-3 py-3 bg-gray-50 border rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
                             errors.phoneNumber ? "border-red-300" : "border-gray-200"
                           }`}
-                          placeholder="+1 (555) 000-0000"
+                          placeholder="0777700000"
                         />
                       </div>
                       {errors.phoneNumber && (
@@ -459,7 +459,7 @@ const RegisterCompany = () => {
                           className={`w-full pl-10 pr-3 py-3 bg-gray-50 border rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
                             errors.companyName ? "border-red-300" : "border-gray-200"
                           }`}
-                          placeholder="Acme Corporation"
+                          placeholder="Tech Innovators Ltd."
                         />
                       </div>
                       {errors.companyName && (
@@ -575,7 +575,7 @@ const RegisterCompany = () => {
                           className={`w-full pl-10 pr-3 py-3 bg-gray-50 border rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
                             errors.address ? "border-red-300" : "border-gray-200"
                           }`}
-                          placeholder="123 Main St, City, State"
+                          placeholder="Amman, Jordan"
                         />
                       </div>
                       {errors.address && (

@@ -302,7 +302,7 @@ const RegisterStudent = () => {
                         className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${
                           errors.fullName ? "border-red-300" : "border-gray-300"
                         }`}
-                        placeholder="John Doe"
+                        placeholder="ahmad ali"
                       />
                     </div>
                     {errors.fullName && (
@@ -415,7 +415,7 @@ const RegisterStudent = () => {
                             ? "border-red-300"
                             : "border-gray-300"
                         }`}
-                        placeholder="+962770123456"
+                        placeholder="0777700000"
                       />
                     </div>
                     {errors.phoneNumber && (
@@ -554,11 +554,11 @@ const RegisterStudent = () => {
                         onChange={handleInputChange}
                         min="0"
                         max="4"
-                        step="0.01"
+                        step="0.1"
                         className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${
                           errors.gpa ? "border-red-300" : "border-gray-300"
                         }`}
-                        placeholder="3.70"
+                        placeholder="3.5"
                       />
                     </div>
                     {errors.gpa && (

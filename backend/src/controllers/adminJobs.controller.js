@@ -597,7 +597,6 @@ const adminJobsController = {
           'id',
           'status',
           'coverLetter',
-          'customCvLink',
           'appliedAt',
           'viewedByCompany',
           'respondedAt'

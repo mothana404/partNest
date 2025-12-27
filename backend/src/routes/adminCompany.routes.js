@@ -8,7 +8,7 @@ const router = express.Router();
 router.use(authenticate);
 router.use(authorize("ADMIN"));
 
-router.get("/getAll/", adminCompaniesController.getAllCompanies);
+router.get("/getAll", adminCompaniesController.getAllCompanies);
 router.get("/:id", adminCompaniesController.getCompanyById);
 router.patch("/:id/verify", adminCompaniesController.verifyCompany);
 router.patch("/:id/toggle-status", adminCompaniesController.toggleCompanyStatus);

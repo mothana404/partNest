@@ -7,6 +7,7 @@ const {
 } = require("../../models/associations");
 const ApiResponse = require("../utils/response");
 const { Op, Sequelize } = require("sequelize");
+const { sequelize } = require('../config/database');
 
 const adminCategoriesController = {
   // Get all categories with pagination and filters
@@ -619,7 +620,6 @@ const adminCategoriesController = {
       });
 
       // Applications over time
-      const { sequelize } = require("../../models/associations");
       const applicationsOverTime = await sequelize.query(`
         SELECT 
           DATE_TRUNC('day', a."appliedAt") as date,

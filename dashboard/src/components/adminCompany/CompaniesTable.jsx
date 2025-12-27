@@ -2,9 +2,6 @@ import React from 'react';
 import { 
   Eye, 
   MoreHorizontal, 
-  CheckCircle, 
-  XCircle, 
-  Clock, 
   Building,
   Trash2,
   Shield,
@@ -68,7 +65,7 @@ const CompaniesTable = ({
         {isOpen && (
           <>
             <div className="fixed inset-0 z-10" onClick={() => setIsOpen(false)} />
-            <div className="absolute right-0 z-20 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+            <div className="absolute right-0 z-50 mt-2 w-56 rounded-lg shadow-xl bg-white ring-1 ring-black ring-opacity-5">
               <div className="py-1" role="menu">
                 {children}
               </div>
@@ -112,68 +109,68 @@ const CompaniesTable = ({
 
   return (
     <div className="space-y-4">
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+      <div className="w-full rounded-lg border border-gray-200 shadow-sm">
+        <table className="w-full divide-y divide-gray-200">
+          <thead className="bg-gradient-to-r from-gray-50 to-gray-100">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-1/5">
                 Company
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-1/8">
                 Industry
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-1/5">
                 Contact
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-1/8">
                 Status
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-1/10">
                 Jobs
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider w-1/6">
                 Joined Date
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-3 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider w-20">
                 Actions
               </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {companies.map((company) => (
-              <tr key={company.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 whitespace-nowrap">
+              <tr key={company.id} className="hover:bg-blue-50 transition-colors duration-150">
+                <td className="px-4 py-4">
                   <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-                      <Building className="w-5 h-5 text-gray-500" />
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-md">
+                      <Building className="w-5 h-5 text-white" />
                     </div>
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold text-gray-900 truncate">
                         {company.companyName}
                       </p>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-xs text-gray-500 truncate">
                         ID: {company.id.slice(0, 8)}...
                       </p>
                     </div>
                   </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="text-sm text-gray-900">
+                <td className="px-4 py-4">
+                  <span className="text-sm text-gray-700">
                     {company.industry || 'Not specified'}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div>
-                    <p className="text-sm font-medium text-gray-900">
+                <td className="px-4 py-4">
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-gray-900 truncate">
                       {company.user?.fullName}
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-xs text-gray-500 truncate">
                       {company.user?.email}
                     </p>
                   </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="space-y-1">
+                <td className="px-4 py-4">
+                  <div className="space-y-1.5">
                     <Badge 
                       variant={company.user?.isActive ? 'green' : 'red'}
                       className="flex items-center gap-1 w-fit"
@@ -190,29 +187,29 @@ const CompaniesTable = ({
                     </Badge>
                   </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-4 py-4">
                   <div>
-                    <p className="text-sm font-medium text-gray-900">
+                    <p className="text-sm font-semibold text-gray-900">
                       {company.jobCount || 0} total
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-xs text-gray-500">
                       {company.activeJobCount || 0} active
                     </p>
                   </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-4 py-4">
                   <div>
                     <p className="text-sm text-gray-900">
                       {formatDate(company.user?.createdAt)}
                     </p>
                     {company.user?.lastLogin && (
                       <p className="text-xs text-gray-500">
-                        Last login: {formatDate(company.user.lastLogin)}
+                        Last: {formatDate(company.user.lastLogin)}
                       </p>
                     )}
                   </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right">
+                <td className="px-4 py-4 text-right">
                   <Dropdown
                     trigger={
                       <Button>

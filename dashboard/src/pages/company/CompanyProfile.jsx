@@ -519,25 +519,6 @@ const CompanyProfile = () => {
                 </div>
               </div>
             </div>
-
-            {/* Company IDs (for debugging/admin) */}
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">Profile IDs</h3>
-              <div className="space-y-3">
-                <div>
-                  <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">User ID</p>
-                  <p className="text-xs text-gray-700 font-mono bg-gray-50 p-2 rounded break-all">
-                    {profileData.user.user_id}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Company ID</p>
-                  <p className="text-xs text-gray-700 font-mono bg-gray-50 p-2 rounded break-all">
-                    {profileData.company.id}
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

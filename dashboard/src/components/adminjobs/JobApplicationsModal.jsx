@@ -69,7 +69,7 @@ const JobApplicationsModal = ({ job, onClose }) => {
     }
   };
 
-  const handleStatusUpdate = async (applicationId, newStatus, feedback = '', rejectionReason = '') => {
+  const handleStatusUpdate = async (applicationId, newStatus, feedback = '') => {
     try {
       const token = getToken();
       const response = await axios.patch(
@@ -77,7 +77,6 @@ const JobApplicationsModal = ({ job, onClose }) => {
         { 
           status: newStatus,
           feedback,
-          rejectionReason
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -120,12 +119,6 @@ const JobApplicationsModal = ({ job, onClose }) => {
       case 'accept':
         if (window.confirm('Accept this application?')) {
           handleStatusUpdate(application.id, 'ACCEPTED');
-        }
-        break;
-      case 'reject':
-        const reason = prompt('Please provide a reason for rejection:');
-        if (reason) {
-          handleStatusUpdate(application.id, 'REJECTED', '', reason);
         }
         break;
       case 'review':
@@ -404,8 +397,8 @@ const JobApplicationsModal = ({ job, onClose }) => {
             setShowApplicationDetail(false);
             setSelectedApplication(null);
           }}
-          onStatusUpdate={(applicationId, status, feedback, rejectionReason) => {
-            handleStatusUpdate(applicationId, status, feedback, rejectionReason);
+          onStatusUpdate={(applicationId, status, feedback) => {
+            handleStatusUpdate(applicationId, status, feedback);
             setShowApplicationDetail(false);
             setSelectedApplication(null);
           }}
@@ -418,14 +411,9 @@ const JobApplicationsModal = ({ job, onClose }) => {
 // Application Detail Modal Sub-component
 const ApplicationDetailModal = ({ application, onClose, onStatusUpdate }) => {
   const [feedback, setFeedback] = useState('');
-  const [rejectionReason, setRejectionReason] = useState('');
 
   const handleStatusChange = (newStatus) => {
-    if (newStatus === 'REJECTED' && !rejectionReason.trim()) {
-      alert('Please provide a reason for rejection');
-      return;
-    }
-    onStatusUpdate(application.id, newStatus, feedback, rejectionReason);
+    onStatusUpdate(application.id, newStatus, feedback);
   };
 
   return (
@@ -539,20 +527,6 @@ const ApplicationDetailModal = ({ application, onClose, onStatusUpdate }) => {
               />
             </div>
 
-            {/* Rejection Reason */}
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Rejection Reason (Required for rejection)
-              </label>
-              <input
-                type="text"
-                value={rejectionReason}
-                onChange={(e) => setRejectionReason(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Reason for rejection..."
-              />
-            </div>
-
             {/* Action Buttons */}
             <div className="flex gap-2">
               <button
@@ -560,12 +534,6 @@ const ApplicationDetailModal = ({ application, onClose, onStatusUpdate }) => {
                 className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
               >
                 Mark as Reviewed
-              </button>
-              <button
-                onClick={() => handleStatusChange('INTERVIEW_SCHEDULED')}
-                className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition-colors"
-              >
-                Schedule Interview
               </button>
               <button
                 onClick={() => handleStatusChange('ACCEPTED')}

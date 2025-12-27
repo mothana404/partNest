@@ -6,10 +6,6 @@ import {
   X,
   Upload,
   Camera,
-  MapPin,
-  Phone,
-  Mail,
-  Calendar,
   Briefcase,
   GraduationCap,
   Star,
@@ -20,9 +16,7 @@ import {
   AlertCircle,
   Target,
   Sparkles,
-  Info,
   ArrowLeft,
-  Edit3,
   Loader,
 } from "lucide-react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
@@ -56,7 +50,6 @@ const ProfileEditPage = () => {
     about: "",
     cvLink: "",
     availability: true,
-    // preferredJobTypes: [''],
     expectedSalaryMin: null,
     expectedSalaryMax: null,
   });
@@ -74,15 +67,6 @@ const ProfileEditPage = () => {
     { id: "experience", label: "Experience", icon: Briefcase },
     { id: "links", label: "Links", icon: LinkIcon },
   ];
-
-//   const jobTypes = [
-//     { value: "INTERNSHIP", label: "Internship" },
-//     { value: "PART_TIME", label: "Part Time" },
-//     { value: "FULL_TIME", label: "Full Time" },
-//     { value: "CONTRACT", label: "Contract" },
-//     { value: "FREELANCE", label: "Freelance" },
-//     { value: "REMOTE", label: "Remote" },
-//   ];
 
   const skillLevels = ["Beginner", "Intermediate", "Advanced", "Expert"];
   const linkTypes = [
@@ -148,9 +132,6 @@ const ProfileEditPage = () => {
           about: data.student?.about || "",
           cvLink: data.student?.cvLink || "",
           availability: data.student?.availability !== false,
-        //   preferredJobTypes: Array.isArray(data.student?.preferredJobTypes)
-        //     ? data.student.preferredJobTypes
-        //     : [],
           preferredLocations: Array.isArray(data.student?.preferredLocations)
             ? data.student.preferredLocations
             : [],
@@ -160,7 +141,16 @@ const ProfileEditPage = () => {
 
         // Set other data
         setSkills(Array.isArray(data.skills) ? data.skills : []);
-        setExperiences(Array.isArray(data.experiences) ? data.experiences : []);
+        // Normalize experience dates to 'yyyy-MM-dd' for HTML date inputs and use null for no endDate
+        setExperiences(
+          Array.isArray(data.experiences)
+            ? data.experiences.map((exp) => ({
+                ...exp,
+                startDate: exp.startDate ? exp.startDate.split("T")[0] : "",
+                endDate: exp.endDate ? exp.endDate.split("T")[0] : null,
+              }))
+            : []
+        );
         setLinks(Array.isArray(data.links) ? data.links : []);
         setImagePreview(data.user?.image || "");
       }
@@ -196,9 +186,6 @@ const ProfileEditPage = () => {
         about: formData.about,
         cvLink: formData.cvLink,
         availability: formData.availability,
-        // preferredJobTypes: Array.isArray(formData.preferredJobTypes)
-        //   ? formData.preferredJobTypes
-        //   : [],
         preferredLocations: Array.isArray(formData.preferredLocations)
           ? formData.preferredLocations
           : [],
@@ -243,11 +230,6 @@ const ProfileEditPage = () => {
             dataToSend.expectedSalaryMax
           );
 
-        // Stringify arrays
-        // formDataToSend.append(
-        //   "preferredJobTypes",
-        //   JSON.stringify(dataToSend.preferredJobTypes)
-        // );
         formDataToSend.append(
           "preferredLocations",
           JSON.stringify(dataToSend.preferredLocations)
@@ -373,7 +355,7 @@ const ProfileEditPage = () => {
         location: "",
         employmentType: "",
         startDate: "",
-        endDate: "",
+        endDate: null,
         isCurrent: false,
       },
     ]);
@@ -710,82 +692,6 @@ const ProfileEditPage = () => {
                   />
                 </div>
               </div>
-
-              {/* Job Preferences */}
-              {/* <div className="mt-8 pt-8 border-t border-gray-200">
-                <h4 className="text-lg font-semibold text-gray-900 mb-6">
-                  Job Preferences
-                </h4>
-
-                <div className="mb-6">
-                  <label className="block text-sm font-semibold text-gray-700 mb-3">
-                    Preferred Job Types
-                  </label>
-                  <div className="flex flex-wrap gap-3">
-                    {jobTypes.map((jobType) => {
-                      const isSelected =
-                        Array.isArray(formData.preferredJobTypes) &&
-                        formData.preferredJobTypes.includes(jobType.value);
-                      return (
-                        <label
-                          key={jobType.value}
-                          className={`flex items-center px-4 py-2 rounded-xl border-2 cursor-pointer transition-all duration-200 ${
-                            isSelected
-                              ? "bg-blue-50 border-blue-300 text-blue-700"
-                              : "bg-white border-gray-300 text-gray-700 hover:border-blue-300"
-                          }`}
-                        >
-                          <input
-                            type="checkbox"
-                            checked={isSelected}
-                            onChange={() => handleJobTypeChange(jobType.value)}
-                            className="sr-only"
-                          />
-                          <span className="text-sm font-medium">
-                            {jobType.label}
-                          </span>
-                        </label>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-3">
-                    Expected Salary Range (USD/month)
-                  </label>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <input
-                        type="number"
-                        placeholder="Minimum salary"
-                        value={formData.expectedSalaryMin || ""}
-                        onChange={(e) =>
-                          handleInputChange(
-                            "expectedSalaryMin",
-                            e.target.value ? parseInt(e.target.value) : null
-                          )
-                        }
-                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                      />
-                    </div>
-                    <div>
-                      <input
-                        type="number"
-                        placeholder="Maximum salary"
-                        value={formData.expectedSalaryMax || ""}
-                        onChange={(e) =>
-                          handleInputChange(
-                            "expectedSalaryMax",
-                            e.target.value ? parseInt(e.target.value) : null
-                          )
-                        }
-                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div> */}
             </div>
           </div>
         );
@@ -1055,7 +961,7 @@ const ProfileEditPage = () => {
                           </label>
                           <input
                             type="date"
-                            value={experience.startDate}
+                            value={experience.startDate || ""}
                             onChange={(e) =>
                               updateExperience(
                                 index,
@@ -1074,9 +980,13 @@ const ProfileEditPage = () => {
                           </label>
                           <input
                             type="date"
-                            value={experience.endDate}
+                            value={experience.endDate || ""}
                             onChange={(e) =>
-                              updateExperience(index, "endDate", e.target.value)
+                              updateExperience(
+                                index,
+                                "endDate",
+                                e.target.value ? e.target.value : null
+                              )
                             }
                             disabled={experience.isCurrent}
                             className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed transition-all duration-200"
@@ -1088,7 +998,7 @@ const ProfileEditPage = () => {
                         <label className="flex items-center gap-2 cursor-pointer">
                           <input
                             type="checkbox"
-                            checked={experience.isCurrent}
+                            checked={experience.endDate === null}
                             onChange={(e) => {
                               updateExperience(
                                 index,
@@ -1096,10 +1006,10 @@ const ProfileEditPage = () => {
                                 e.target.checked
                               );
                               if (e.target.checked) {
-                                updateExperience(index, "endDate", "");
+                                updateExperience(index, "endDate", null);
                               }
                             }}
-                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 w-4 h-4"
+                            className="form-checkbox accent-blue-600 rounded border-gray-300 text-blue-600 focus:ring-blue-500 w-4 h-4"
                           />
                           <span className="text-sm font-medium text-gray-700">
                             I currently work here
@@ -1492,34 +1402,6 @@ const ProfileEditPage = () => {
                   <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
                   <p>Keep your availability status updated</p>
                 </div>
-              </div>
-            </div>
-
-            {/* Need Help */}
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <Info className="w-5 h-5 text-blue-600" />
-                Need Help?
-              </h3>
-              <div className="space-y-2">
-                <button
-                  type="button"
-                  className="w-full text-left p-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-lg transition-colors"
-                >
-                  📖 Profile Guidelines
-                </button>
-                <button
-                  type="button"
-                  className="w-full text-left p-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-lg transition-colors"
-                >
-                  💬 Contact Support
-                </button>
-                <button
-                  type="button"
-                  className="w-full text-left p-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-lg transition-colors"
-                >
-                  🎯 Best Practices
-                </button>
               </div>
             </div>
           </div>

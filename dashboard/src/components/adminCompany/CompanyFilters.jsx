@@ -2,7 +2,24 @@ import React from 'react';
 import { Search, X } from 'lucide-react';
 
 const CompanyFilters = ({ filters, onFilterChange }) => {
+  // Local debounced search to update parent only after user stops typing
+  const [localSearch, setLocalSearch] = React.useState(filters.search || '');
+
+  React.useEffect(() => {
+    setLocalSearch(filters.search || '');
+  }, [filters.search]);
+
+  React.useEffect(() => {
+    const t = setTimeout(() => {
+      if (localSearch !== filters.search) {
+        onFilterChange('search', localSearch);
+      }
+    }, 300); // 300ms debounce
+    return () => clearTimeout(t);
+  }, [localSearch, filters.search, onFilterChange]);
+
   const handleClearFilters = () => {
+    setLocalSearch('');
     onFilterChange('search', '');
     onFilterChange('isVerified', '');
     onFilterChange('isActive', '');
@@ -17,6 +34,10 @@ const CompanyFilters = ({ filters, onFilterChange }) => {
       placeholder={placeholder}
       value={value}
       onChange={onChange}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') e.preventDefault();
+      }}
+      autoComplete="off"
       className={`block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 ${className}`}
     />
   );
@@ -32,13 +53,14 @@ const CompanyFilters = ({ filters, onFilterChange }) => {
   );
 
   const Button = ({ children, variant = 'outline', onClick, className = '' }) => {
-    const baseStyles = 'inline-flex items-center px-4 py-2 border font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2';
+    const baseStyles = 'inline-flex items-center px-4 py-2 border font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors';
     const variantStyles = {
       outline: 'border-gray-300 text-gray-700 bg-white hover:bg-gray-50 focus:ring-blue-500'
     };
 
     return (
       <button
+        type="button"
         className={`${baseStyles} ${variantStyles[variant]} ${className}`}
         onClick={onClick}
       >
@@ -55,10 +77,15 @@ const CompanyFilters = ({ filters, onFilterChange }) => {
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
           <Input
             placeholder="Search by company name, industry, or email..."
-            value={filters.search}
-            onChange={(e) => onFilterChange('search', e.target.value)}
+            value={localSearch}
+            onChange={(e) => setLocalSearch(e.target.value)}
             className="pl-10"
           />
+          {(localSearch !== '' && localSearch !== filters.search) && (
+            <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+              <span className="text-xs text-gray-400 italic">searching...</span>
+            </div>
+          )}
         </div>
 
         {/* Verification Status Filter */}
@@ -103,7 +130,7 @@ const CompanyFilters = ({ filters, onFilterChange }) => {
         {hasActiveFilters && (
           <Button
             onClick={handleClearFilters}
-            className="w-full lg:w-auto"
+            className="w-full lg:w-auto whitespace-nowrap"
           >
             <X className="w-4 h-4 mr-2" />
             Clear
