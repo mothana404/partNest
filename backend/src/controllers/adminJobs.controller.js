@@ -10,6 +10,7 @@ const {
 } = require("../../models/associations");
 const ApiResponse = require("../utils/response");
 const { Op, Sequelize } = require("sequelize");
+const { sequelize } = require('../config/database');
 
 const adminJobsController = {
   getAllJobs: async (req, res) => {
@@ -806,8 +807,6 @@ const adminJobsController = {
         default:
           dateFilter = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
       }
-
-      const { sequelize } = require("../../models/associations");
 
       // Get views over time
       const viewsOverTime = await sequelize.query(`

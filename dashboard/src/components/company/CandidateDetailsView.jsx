@@ -679,7 +679,7 @@ const CandidateDetailsView = ({ candidate, onUpdateStatus, onClose }) => {
             </div>
 
             {/* Quick Actions Card */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            {/* <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
               <div className="px-6 py-4 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
                 <h3 className="text-lg font-semibold text-slate-900">
                   Quick Actions
@@ -728,7 +728,7 @@ const CandidateDetailsView = ({ candidate, onUpdateStatus, onClose }) => {
                   </a>
                 )}
               </div>
-            </div>
+            </div> */}
 
             {/* Notes Card */}
             <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">

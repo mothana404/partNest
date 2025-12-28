@@ -390,7 +390,7 @@ const ApplicationDetailsView = ({ application, onUpdateStatus, onClose }) => {
           </div>
 
           {/* Quick Actions */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
+          {/* <div className="bg-white rounded-lg border border-gray-200 p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
             
             <div className="space-y-3">
@@ -436,7 +436,7 @@ const ApplicationDetailsView = ({ application, onUpdateStatus, onClose }) => {
                 </a>
               )}
             </div>
-          </div>
+          </div> */}
 
           {/* Job Details */}
           <div className="bg-white rounded-lg border border-gray-200 p-6">

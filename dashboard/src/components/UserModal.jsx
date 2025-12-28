@@ -202,14 +202,17 @@ const UserModal = ({ user, onClose, onUserUpdate }) => {
                       {userDetails.user.isActive ? 'Active' : 'Inactive'}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span>Verified:</span>
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full border ${
-                      userDetails.user.isVerified ? 'bg-green-100 text-green-800 border-green-200' : 'bg-yellow-100 text-yellow-800 border-yellow-200'
-                    }`}>
-                      {userDetails.user.isVerified ? 'Verified' : 'Unverified'}
-                    </span>
-                  </div>
+                  {/* Only show verified badge for COMPANY role */}
+                  {userDetails.user.role === 'COMPANY' && (
+                    <div className="flex items-center justify-between">
+                      <span>Verified:</span>
+                      <span className={`px-2 py-1 text-xs font-medium rounded-full border ${
+                        userDetails.user.isVerified ? 'bg-green-100 text-green-800 border-green-200' : 'bg-yellow-100 text-yellow-800 border-yellow-200'
+                      }`}>
+                        {userDetails.user.isVerified ? 'Verified' : 'Unverified'}
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 <button
@@ -264,26 +267,52 @@ const UserModal = ({ user, onClose, onUserUpdate }) => {
             )}
 
             {/* Recent Activity */}
-            {(userDetails.recentApplications || userDetails.recentJobs) && (
+            {((userDetails.recentApplications && userDetails.recentApplications.length > 0) || 
+              (userDetails.recentJobs && userDetails.recentJobs.length > 0)) && (
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
                 <div className="bg-gray-50 rounded-lg p-4 max-h-60 overflow-y-auto">
-                  {userDetails.recentApplications && (
-                    <div className="space-y-2">
+                  {userDetails.recentApplications && userDetails.recentApplications.length > 0 && (
+                    <div className="space-y-2 mb-4">
                       <h4 className="font-medium text-gray-700">Recent Applications</h4>
                       {userDetails.recentApplications.map((app, index) => (
                         <div key={index} className="text-sm text-gray-600">
-                          Applied to "{app.job.title}" at {app.job.company.companyName}
+                          Applied to "{app.job?.title || 'Unknown Job'}"
+                          {app.student && (
+                            <span className="text-gray-500">
+                              {' '}by {app.student.user?.fullName || 'Unknown Student'} ({app.student.user?.email || 'No email'})
+                            </span>
+                          )}
+                          <div className="text-xs text-gray-400 mt-1">
+                            Status: <span className={`font-medium ${
+                              app.status === 'ACCEPTED' ? 'text-green-600' :
+                              app.status === 'REJECTED' ? 'text-red-600' :
+                              app.status === 'INTERVIEW_SCHEDULED' ? 'text-purple-600' :
+                              'text-yellow-600'
+                            }`}>
+                              {app.status.replace(/_/g, ' ')}
+                            </span>
+                          </div>
                         </div>
                       ))}
                     </div>
                   )}
-                  {userDetails.recentJobs && (
+                  {userDetails.recentJobs && userDetails.recentJobs.length > 0 && (
                     <div className="space-y-2">
                       <h4 className="font-medium text-gray-700">Recent Jobs Posted</h4>
                       {userDetails.recentJobs.map((job, index) => (
                         <div key={index} className="text-sm text-gray-600">
-                          "{job.title}" - {job.applicationCount} applications
+                          "{job.title}" - {job.applicationCount} application{job.applicationCount !== 1 ? 's' : ''}
+                          <div className="text-xs text-gray-400 mt-1">
+                            Status: <span className={`font-medium ${
+                              job.status === 'ACTIVE' ? 'text-green-600' :
+                              job.status === 'PAUSED' ? 'text-yellow-600' :
+                              job.status === 'DRAFT' ? 'text-gray-600' :
+                              'text-red-600'
+                            }`}>
+                              {job.status}
+                            </span>
+                          </div>
                         </div>
                       ))}
                     </div>

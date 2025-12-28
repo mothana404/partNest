@@ -357,9 +357,9 @@ const DashboardHomePage = () => {
                 </div>
               </div>
               
-              <button className="w-full mt-4 py-2 bg-white bg-opacity-20 rounded-lg text-white font-medium hover:bg-opacity-30 transition-colors">
+              {/* <button className="w-full mt-4 py-2 bg-white bg-opacity-20 rounded-lg text-white font-medium hover:bg-opacity-30 transition-colors">
                 View Detailed Analytics
-              </button>
+              </button> */}
             </div>
           </div>
         </div>

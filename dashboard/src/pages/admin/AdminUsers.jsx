@@ -4,15 +4,11 @@ import {
   Users,
   Search,
   Filter,
-  Download,
-  Plus,
-  Edit,
   Trash2,
   Eye,
   UserCheck,
   UserX,
   Shield,
-  MoreVertical,
   RefreshCw,
   CheckSquare,
   Square,
@@ -282,13 +278,6 @@ const AdminUsers = () => {
             </div>
 
             <div className="flex items-center gap-3">
-              {/* <button
-                onClick={handleExportCSV}
-                className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-2"
-              >
-                <Download className="w-4 h-4" />
-                Export CSV
-              </button> */}
               
               <button
                 onClick={() => setShowFilters(!showFilters)}
@@ -455,9 +444,12 @@ const AdminUsers = () => {
                         <span className={`px-2 py-1 text-xs font-medium rounded-full border ${getStatusColor(user.isActive)}`}>
                           {user.isActive ? 'Active' : 'Inactive'}
                         </span>
-                        <span className={`px-2 py-1 text-xs font-medium rounded-full border ${user.isVerified ? 'bg-green-100 text-green-800 border-green-200' : 'bg-yellow-100 text-yellow-800 border-yellow-200'}`}>
-                          {user.isVerified ? 'Verified' : 'Unverified'}
-                        </span>
+                        {/* Only show verified badge for COMPANY role */}
+                        {user.role === 'COMPANY' && (
+                          <span className={`px-2 py-1 text-xs font-medium rounded-full border ${user.isVerified ? 'bg-green-100 text-green-800 border-green-200' : 'bg-yellow-100 text-yellow-800 border-yellow-200'}`}>
+                            {user.isVerified ? 'Verified' : 'Unverified'}
+                          </span>
+                        )}
                       </div>
                     </td>
 
@@ -523,6 +515,7 @@ const AdminUsers = () => {
                             setShowUserModal(true);
                           }}
                           className="text-blue-600 hover:text-blue-800"
+                          title="View details"
                         >
                           <Eye className="w-4 h-4" />
                         </button>
@@ -531,21 +524,27 @@ const AdminUsers = () => {
                           onClick={() => handleUserAction('toggleStatus', user.user_id, { isActive: !user.isActive })}
                           className={`${user.isActive ? 'text-red-600 hover:text-red-800' : 'text-green-600 hover:text-green-800'}`}
                           disabled={user.role === 'ADMIN' && !user.isActive}
+                          title={user.isActive ? 'Deactivate user' : 'Activate user'}
                         >
                           {user.isActive ? <UserX className="w-4 h-4" /> : <UserCheck className="w-4 h-4" />}
                         </button>
 
-                        <button
-                          onClick={() => handleUserAction('verify', user.user_id, { isVerified: !user.isVerified })}
-                          className={`${user.isVerified ? 'text-yellow-600 hover:text-yellow-800' : 'text-green-600 hover:text-green-800'}`}
-                        >
-                          <Shield className="w-4 h-4" />
-                        </button>
+                        {/* Only show verify button for COMPANY role */}
+                        {user.role === 'COMPANY' && (
+                          <button
+                            onClick={() => handleUserAction('verify', user.user_id, { isVerified: !user.isVerified })}
+                            className={`${user.isVerified ? 'text-yellow-600 hover:text-yellow-800' : 'text-green-600 hover:text-green-800'}`}
+                            title={user.isVerified ? 'Unverify company' : 'Verify company'}
+                          >
+                            <Shield className="w-4 h-4" />
+                          </button>
+                        )}
 
                         {user.role !== 'ADMIN' && (
                           <button
                             onClick={() => handleUserAction('delete', user.user_id)}
                             className="text-red-600 hover:text-red-800"
+                            title="Delete user"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>

@@ -1,6 +1,6 @@
-import React, { useState, useContext } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState, useContext } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
 import {
   Mail,
   Lock,
@@ -10,10 +10,10 @@ import {
   AlertCircle,
   ArrowRight,
   Building2,
-  GraduationCap
-} from 'lucide-react';
-import { AuthContext } from '../../context/AuthContext';
-import logo from '../../assets/PartnestLogo.png';
+  GraduationCap,
+} from "lucide-react";
+import { AuthContext } from "../../context/AuthContext";
+import logo from "../../assets/PartnestLogo.png";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -21,23 +21,23 @@ const LoginPage = () => {
   const { login } = useContext(AuthContext);
 
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const from = location.state?.from?.pathname || '/dashboard';
+  const from = location.state?.from?.pathname || "/dashboard";
   // Redirect admins to the admin users page
-  const adminFrom = '/admin/dashboard/users';
+  const adminFrom = "/admin/dashboard/users";
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
@@ -45,15 +45,15 @@ const LoginPage = () => {
     const newErrors = {};
 
     if (!formData.email) {
-      newErrors.email = 'Email is required';
+      newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
+      newErrors.email = "Email is invalid";
     }
 
     if (!formData.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = "Password is required";
     } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+      newErrors.password = "Password must be at least 6 characters";
     }
 
     setErrors(newErrors);
@@ -62,7 +62,7 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
 
     setLoading(true);
@@ -70,14 +70,14 @@ const LoginPage = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost:8080/api/auth/login',
+        "http://localhost:8080/api/auth/login",
         {
           email: formData.email,
-          password: formData.password
+          password: formData.password,
         },
         {
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         }
       );
@@ -85,21 +85,23 @@ const LoginPage = () => {
       const { data } = response;
 
       if (data.success) {
-        console.log('Login successful:', data);
+        console.log("Login successful:", data);
         login(data.data.user, data.data.accessToken);
-        if (data.data.user.role === 'ADMIN') {
+        if (data.data.user.role === "ADMIN") {
           navigate(adminFrom, { replace: true });
         } else {
           navigate(from, { replace: true });
         }
       } else {
-        throw new Error(data.message || 'Login failed');
+        throw new Error(data.message || "Login failed");
       }
     } catch (err) {
       if (err.response) {
-        setErrors({ submit: err.response.data?.message || 'Invalid email or password' });
+        setErrors({
+          submit: err.response.data?.message || "Invalid email or password",
+        });
       } else if (err.request) {
-        setErrors({ submit: 'No response from server. Please try again.' });
+        setErrors({ submit: "No response from server. Please try again." });
       } else {
         setErrors({ submit: err.message });
       }
@@ -115,14 +117,25 @@ const LoginPage = () => {
         <div className="w-full max-w-md">
           {/* Logo */}
           <div className="mb-8">
-            <div className="flex items-center gap-2 mb-6">
+            <Link
+              to="http://localhost:3001/"
+              className="flex items-center gap-2 mb-6 w-fit hover:opacity-80 transition-opacity"
+            >
               <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm overflow-hidden">
-                <img src={logo} alt="PartNest logo" className="w-8 h-8 object-contain" />
+                <img
+                  src={logo}
+                  alt="PartNest logo"
+                  className="w-8 h-8 object-contain"
+                />
               </div>
               <span className="text-2xl font-bold text-gray-900">PartNest</span>
-            </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome back</h1>
-            <p className="text-gray-600">Enter your credentials to access your account</p>
+            </Link>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              Welcome back
+            </h1>
+            <p className="text-gray-600">
+              Enter your credentials to access your account
+            </p>
           </div>
 
           {/* Form */}
@@ -156,7 +169,11 @@ const LoginPage = () => {
                     placeholder-gray-400 text-gray-900
                     focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
                     transition-all duration-200
-                    ${errors.email ? 'border-red-300 bg-red-50' : 'border-gray-200'}
+                    ${
+                      errors.email
+                        ? "border-red-300 bg-red-50"
+                        : "border-gray-200"
+                    }
                   `}
                   placeholder="you@example.com"
                 />
@@ -179,7 +196,7 @@ const LoginPage = () => {
                   <Lock className="w-5 h-5 text-gray-400" />
                 </div>
                 <input
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   name="password"
                   value={formData.password}
                   onChange={handleInputChange}
@@ -188,7 +205,11 @@ const LoginPage = () => {
                     placeholder-gray-400 text-gray-900
                     focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
                     transition-all duration-200
-                    ${errors.password ? 'border-red-300 bg-red-50' : 'border-gray-200'}
+                    ${
+                      errors.password
+                        ? "border-red-300 bg-red-50"
+                        : "border-gray-200"
+                    }
                   `}
                   placeholder="Enter your password"
                 />
@@ -210,23 +231,6 @@ const LoginPage = () => {
                   {errors.password}
                 </p>
               )}
-            </div>
-
-            {/* Remember Me & Forgot Password */}
-            <div className="flex items-center justify-between">
-              {/* <label className="flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 focus:ring-offset-0"
-                />
-                <span className="ml-2 text-sm text-gray-700">Remember me</span>
-              </label> */}
-              {/* <Link 
-                to="/forgot-password" 
-                className="text-sm font-medium text-blue-600 hover:text-blue-700"
-              >
-                Forgot password?
-              </Link> */}
             </div>
 
             {/* Submit Button */}
@@ -260,14 +264,16 @@ const LoginPage = () => {
                 <div className="w-full border-t border-gray-200"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-white text-gray-500">Don't have an account?</span>
+                <span className="px-4 bg-white text-gray-500">
+                  Don't have an account?
+                </span>
               </div>
             </div>
 
             {/* Sign Up Options */}
             <div className="grid grid-cols-1 gap-3">
-              <Link 
-                to="/register/student" 
+              <Link
+                to="/register/student"
                 className="group relative px-4 py-3 border-2 border-gray-200 rounded-xl hover:border-blue-500 transition-all duration-200"
               >
                 <div className="flex items-center justify-between">
@@ -276,16 +282,20 @@ const LoginPage = () => {
                       <GraduationCap className="w-5 h-5 text-blue-600" />
                     </div>
                     <div className="text-left">
-                      <p className="font-semibold text-gray-900">I'm a Student</p>
-                      <p className="text-xs text-gray-500">Find internships and jobs</p>
+                      <p className="font-semibold text-gray-900">
+                        I'm a Student
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        Find internships and jobs
+                      </p>
                     </div>
                   </div>
                   <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
                 </div>
               </Link>
 
-              <Link 
-                to="/register/company" 
+              <Link
+                to="/register/company"
                 className="group relative px-4 py-3 border-2 border-gray-200 rounded-xl hover:border-green-500 transition-all duration-200"
               >
                 <div className="flex items-center justify-between">
@@ -294,8 +304,12 @@ const LoginPage = () => {
                       <Building2 className="w-5 h-5 text-green-600" />
                     </div>
                     <div className="text-left">
-                      <p className="font-semibold text-gray-900">I'm a Company</p>
-                      <p className="text-xs text-gray-500">Post jobs and find talent</p>
+                      <p className="font-semibold text-gray-900">
+                        I'm a Company
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        Post jobs and find talent
+                      </p>
                     </div>
                   </div>
                   <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-green-600 group-hover:translate-x-1 transition-all" />
@@ -317,9 +331,12 @@ const LoginPage = () => {
 
         {/* Content */}
         <div className="relative z-10 text-white max-w-md">
-          <h2 className="text-4xl font-bold mb-6">Connect with Your Future Career</h2>
+          <h2 className="text-4xl font-bold mb-6">
+            Connect with Your Future Career
+          </h2>
           <p className="text-lg mb-8 text-blue-100">
-            Join thousands of students and companies building meaningful career connections.
+            Join thousands of students and companies building meaningful career
+            connections.
           </p>
 
           {/* Features */}
@@ -330,7 +347,9 @@ const LoginPage = () => {
               </div>
               <div>
                 <h3 className="font-semibold text-lg">For Students</h3>
-                <p className="text-blue-100 text-sm">Find internships, jobs, and career events</p>
+                <p className="text-blue-100 text-sm">
+                  Find internships, jobs, and career events
+                </p>
               </div>
             </div>
 
@@ -340,7 +359,9 @@ const LoginPage = () => {
               </div>
               <div>
                 <h3 className="font-semibold text-lg">For Companies</h3>
-                <p className="text-blue-100 text-sm">Discover and recruit top emerging talent</p>
+                <p className="text-blue-100 text-sm">
+                  Discover and recruit top emerging talent
+                </p>
               </div>
             </div>
           </div>

@@ -49,7 +49,7 @@ const EditJobForm = ({ job, onSubmit, onCancel }) => {
   }, [job]);
 
   const jobTypes = [
-    { value: 'FULL_TIME', label: 'Full Time' },
+    // { value: 'FULL_TIME', label: 'Full Time' },
     { value: 'PART_TIME', label: 'Part Time' },
     { value: 'CONTRACT', label: 'Contract' },
     { value: 'INTERNSHIP', label: 'Internship' },
@@ -73,11 +73,11 @@ const EditJobForm = ({ job, onSubmit, onCancel }) => {
   ];
 
   const educationLevels = [
-    'High School',
+    // 'High School',
     'Associate Degree',
     'Bachelor\'s Degree',
     'Master\'s Degree',
-    'PhD'
+    // 'PhD'
   ];
 
   const handleChange = (e) => {

@@ -1,6 +1,6 @@
 // components/ApplicationDetailsModal.jsx
 import { useState } from "react";
-import { X, FileText, Download, Calendar, MapPin, Building2, User, Mail, Phone } from "lucide-react";
+import { X, FileText, Download, Calendar, MapPin, Building2 } from "lucide-react";
 
 const ApplicationDetailsModal = ({ 
   application, 
@@ -11,7 +11,7 @@ const ApplicationDetailsModal = ({
   const [imageError, setImageError] = useState(false);
   
   if (!application) return null;
-
+  
   const job = application.job || {};
   const company = job.company || {};
   const status = statusConfig[application.status] || statusConfig.PENDING;
@@ -45,9 +45,9 @@ const ApplicationDetailsModal = ({
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-lg border border-gray-200 flex items-center justify-center bg-gray-50 overflow-hidden">
-              {company.logoUrl && !imageError ? (
+              {company.user?.image && !imageError ? (
                 <img
-                  src={company.logoUrl}
+                  src={company.user.image}
                   alt={company.companyName}
                   className="w-full h-full object-cover"
                   onError={() => setImageError(true)}
@@ -81,42 +81,45 @@ const ApplicationDetailsModal = ({
               <div className="flex items-center gap-3">
                 <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
                 <span className="text-sm text-gray-600">
-                  Applied on {formatDate(application.createdAt || application.appliedAt)}
+                  Applied on {formatDate(application.appliedAt || application.createdAt)}
                 </span>
               </div>
               
-              {application.reviewedAt && (
+              {application.viewedByCompany && application.viewedAt && (
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
+                  <span className="text-sm text-gray-600">
+                    Viewed by company on {formatDate(application.viewedAt)}
+                  </span>
+                </div>
+              )}
+              
+              {application.updatedAt && application.updatedAt !== application.appliedAt && (
                 <div className="flex items-center gap-3">
                   <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
                   <span className="text-sm text-gray-600">
-                    Under review since {formatDate(application.reviewedAt)}
+                    Status updated on {formatDate(application.updatedAt)}
                   </span>
                 </div>
               )}
               
-              {application.interviewScheduledAt && (
+              {application.interviewDate && (
                 <div className="flex items-center gap-3">
                   <div className="w-2 h-2 bg-purple-600 rounded-full"></div>
                   <span className="text-sm text-gray-600">
-                    Interview scheduled on {formatDate(application.interviewScheduledAt)}
+                    Interview scheduled for {formatDate(application.interviewDate)}
                   </span>
                 </div>
               )}
               
-              {application.status === "ACCEPTED" && application.acceptedAt && (
+              {application.respondedAt && (
                 <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-green-600 rounded-full"></div>
+                  <div className={`w-2 h-2 rounded-full ${
+                    application.status === "ACCEPTED" ? "bg-green-600" : 
+                    application.status === "REJECTED" ? "bg-red-600" : "bg-gray-600"
+                  }`}></div>
                   <span className="text-sm text-gray-600">
-                    Accepted on {formatDate(application.acceptedAt)}
-                  </span>
-                </div>
-              )}
-              
-              {application.status === "REJECTED" && application.rejectedAt && (
-                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-red-600 rounded-full"></div>
-                  <span className="text-sm text-gray-600">
-                    Rejected on {formatDate(application.rejectedAt)}
+                    Company responded on {formatDate(application.respondedAt)}
                   </span>
                 </div>
               )}
@@ -151,10 +154,17 @@ const ApplicationDetailsModal = ({
                   </div>
                 )}
                 
-                {job.salary && (
+                {(job.salaryMin || job.salaryMax) && (
                   <div className="flex items-center gap-2 text-sm text-gray-600">
                     <span className="w-4 h-4 text-center">💰</span>
-                    <span>{job.salary}</span>
+                    <span>
+                      {job.salaryMin && job.salaryMax 
+                        ? `${job.salaryMin} - ${job.salaryMax} ${job.salaryCurrency || ''}`
+                        : job.salaryMin 
+                        ? `From ${job.salaryMin} ${job.salaryCurrency || ''}`
+                        : `Up to ${job.salaryMax} ${job.salaryCurrency || ''}`
+                      }
+                    </span>
                   </div>
                 )}
                 
@@ -241,34 +251,83 @@ const ApplicationDetailsModal = ({
             </div>
           )}
 
-          {/* Interview Details (if applicable) */}
-          {application.status === "INTERVIEW_SCHEDULED" && application.interviewDetails && (
+          {/* Company Feedback */}
+          {application.feedback && (
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">Interview Details</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">Company Feedback</h3>
+              <div className={`rounded-lg p-4 border ${
+                application.status === "ACCEPTED" 
+                  ? "bg-green-50 border-green-200" 
+                  : application.status === "REJECTED"
+                  ? "bg-red-50 border-red-200"
+                  : "bg-blue-50 border-blue-200"
+              }`}>
+                <p className={`text-sm whitespace-pre-wrap ${
+                  application.status === "ACCEPTED" 
+                    ? "text-green-800" 
+                    : application.status === "REJECTED"
+                    ? "text-red-800"
+                    : "text-blue-800"
+                }`}>
+                  {application.feedback}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Application Status Badge */}
+          {!application.viewedByCompany && application.status === "PENDING" && (
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+              <div className="flex items-start gap-3">
+                <div className="mt-0.5">
+                  <svg className="w-5 h-5 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-yellow-800">Pending Review</p>
+                  <p className="text-sm text-yellow-700 mt-1">
+                    Your application hasn't been viewed by the company yet. We'll notify you when they review it.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {application.viewedByCompany && application.status === "PENDING" && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="flex items-start gap-3">
+                <div className="mt-0.5">
+                  <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                    <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-blue-800">Application Viewed</p>
+                  <p className="text-sm text-blue-700 mt-1">
+                    The company has reviewed your application. You'll be notified of any updates.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Interview Details (if applicable) */}
+          {application.interviewDate && (
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">Interview Scheduled</h3>
               <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
-                <div className="space-y-2">
-                  {application.interviewDetails.date && (
-                    <div className="flex items-center gap-2 text-sm text-purple-700">
-                      <Calendar className="w-4 h-4" />
-                      <span>{formatDate(application.interviewDetails.date)}</span>
-                    </div>
-                  )}
-                  
-                  {application.interviewDetails.type && (
-                    <div className="flex items-center gap-2 text-sm text-purple-700">
-                      <span className="w-4 h-4 text-center">📹</span>
-                      <span>{application.interviewDetails.type}</span>
-                    </div>
-                  )}
-                  
-                  {application.interviewDetails.notes && (
-                    <div className="mt-3">
-                      <p className="text-sm text-purple-700">
-                        <span className="font-medium">Notes: </span>
-                        {application.interviewDetails.notes}
-                      </p>
-                    </div>
-                  )}
+                <div className="flex items-center gap-3">
+                  <Calendar className="w-6 h-6 text-purple-600" />
+                  <div>
+                    <p className="text-sm font-medium text-purple-900">
+                      {formatDate(application.interviewDate)}
+                    </p>
+                    <p className="text-xs text-purple-700 mt-1">
+                      Make sure to prepare and join on time. Good luck!
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -288,26 +347,21 @@ const ApplicationDetailsModal = ({
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between p-6 border-t border-gray-200 bg-gray-50">
-          <div className="text-sm text-gray-500">
-            Application ID: {application.id}
-          </div>
-          <div className="flex items-center gap-3">
-            {canWithdraw && (
-              <button
-                onClick={onWithdraw}
-                className="px-4 py-2 text-sm text-red-600 border border-red-300 rounded-lg hover:bg-red-50 transition-colors"
-              >
-                Withdraw Application
-              </button>
-            )}
+        <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50">
+          {canWithdraw && (
             <button
-              onClick={onClose}
-              className="px-4 py-2 text-sm bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+              onClick={onWithdraw}
+              className="px-4 py-2 text-sm text-red-600 border border-red-300 rounded-lg hover:bg-red-50 transition-colors"
             >
-              Close
+              Withdraw Application
             </button>
-          </div>
+          )}
+          <button
+            onClick={onClose}
+            className="px-4 py-2 text-sm bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+          >
+            Close
+          </button>
         </div>
       </div>
     </div>

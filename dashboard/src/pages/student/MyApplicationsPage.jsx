@@ -247,7 +247,23 @@ const MyApplicationsPage = () => {
     }, {});
   };
 
+  const getEngagementStats = () => {
+    const total = applications.length;
+    if (total === 0) return { viewedCount: 0, viewedPercentage: 0, respondedCount: 0, respondedPercentage: 0 };
+    
+    const viewedCount = applications.filter(app => app.viewedByCompany).length;
+    const respondedCount = applications.filter(app => app.respondedAt).length;
+    
+    return {
+      viewedCount,
+      viewedPercentage: Math.round((viewedCount / total) * 100),
+      respondedCount,
+      respondedPercentage: Math.round((respondedCount / total) * 100)
+    };
+  };
+
   const statusCounts = getStatusCounts();
+  const engagementStats = getEngagementStats();
   const hasActiveFilters = searchTerm.trim() || filterBy !== "ALL";
 
   return (
@@ -302,6 +318,45 @@ const MyApplicationsPage = () => {
             );
           })}
         </div>
+
+        {/* Engagement Statistics */}
+        {applications.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-blue-700 font-medium mb-1">Applications Viewed</p>
+                  <div className="flex items-baseline gap-2">
+                    <p className="text-2xl font-bold text-blue-900">{engagementStats.viewedCount}</p>
+                    <p className="text-sm text-blue-600">of {applications.length}</p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full">
+                    <span className="text-2xl font-bold text-blue-700">{engagementStats.viewedPercentage}%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-green-700 font-medium mb-1">Company Responses</p>
+                  <div className="flex items-baseline gap-2">
+                    <p className="text-2xl font-bold text-green-900">{engagementStats.respondedCount}</p>
+                    <p className="text-sm text-green-600">of {applications.length}</p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full">
+                    <span className="text-2xl font-bold text-green-700">{engagementStats.respondedPercentage}%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Filters and Search */}
         <div className="bg-white rounded-lg border border-gray-200 p-4 mb-6">

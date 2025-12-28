@@ -400,7 +400,7 @@ const JobDetailsModal = ({
         {/* Modal Actions */}
         <div className="p-6 border-t-2 border-gray-200 bg-gradient-to-r from-gray-50 to-blue-50">
           <div className="flex items-center justify-between flex-wrap gap-4">
-            <button
+            {/* <button
               onClick={onSave}
               className={`inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium border-2 rounded-xl transition-all ${
                 isSaved
@@ -414,7 +414,7 @@ const JobDetailsModal = ({
                 <Bookmark className="w-5 h-5" />
               )}
               {isSaved ? "Saved" : "Save Job"}
-            </button>
+            </button> */}
 
             {!hasApplied ? (
               <button

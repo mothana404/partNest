@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { 
   Calendar,
   Users,
@@ -42,6 +42,63 @@ const AdminApplicationsPage = () => {
   useEffect(() => {
     fetchApplications(filters);
   }, [filters]);
+
+  // Calculate real stats from applications data
+  const calculatedStats = useMemo(() => {
+    if (!applications || applications.length === 0) {
+      return {
+        totalApplications: 0,
+        todayApplications: 0,
+        recentApplications: 0,
+        avgResponseTime: 0,
+        successRate: 0
+      };
+    }
+
+    const now = new Date();
+    const todayStart = new Date(now.setHours(0, 0, 0, 0));
+    const weekAgo = new Date();
+    weekAgo.setDate(weekAgo.getDate() - 7);
+
+    // Total applications
+    const totalApplications = pagination?.totalItems || applications.length;
+
+    // Today's applications
+    const todayApplications = applications.filter(app => 
+      new Date(app.appliedAt) >= todayStart
+    ).length;
+
+    // Recent applications (this week)
+    const recentApplications = applications.filter(app => 
+      new Date(app.appliedAt) >= weekAgo
+    ).length;
+
+    // Average response time
+    const respondedApplications = applications.filter(app => app.respondedAt);
+    const avgResponseTime = respondedApplications.length > 0
+      ? Math.round(
+          respondedApplications.reduce((sum, app) => {
+            const applied = new Date(app.appliedAt);
+            const responded = new Date(app.respondedAt);
+            return sum + (responded - applied) / (1000 * 60 * 60 * 24);
+          }, 0) / respondedApplications.length
+        )
+      : 0;
+
+    // Success rate (accepted / total)
+    const acceptedCount = applications.filter(app => app.status === 'ACCEPTED').length;
+    const successRate = totalApplications > 0 
+      ? Math.round((acceptedCount / totalApplications) * 100) 
+      : 0;
+
+    return {
+      totalApplications,
+      todayApplications,
+      recentApplications,
+      avgResponseTime,
+      successRate
+    };
+  }, [applications, pagination]);
 
   const handleFilterChange = (key, value) => {
     setFilters(prev => ({
@@ -155,13 +212,13 @@ const AdminApplicationsPage = () => {
                     <div>
                       <p className="text-sm font-medium text-gray-600">Total Applications</p>
                       <p className="text-2xl font-bold text-gray-900">
-                        {stats?.overview?.totalApplications || 0}
+                        {calculatedStats.totalApplications}
                       </p>
                     </div>
                     <Users className="w-8 h-8 text-blue-600" />
                   </div>
                   <p className="text-xs text-gray-500 mt-2">
-                    +{stats?.overview?.recentApplications || 0} this week
+                    +{calculatedStats.recentApplications} this week
                   </p>
                 </CardContent>
               </Card>
@@ -172,7 +229,7 @@ const AdminApplicationsPage = () => {
                     <div>
                       <p className="text-sm font-medium text-gray-600">Today's Applications</p>
                       <p className="text-2xl font-bold text-gray-900">
-                        {stats?.overview?.todayApplications || 0}
+                        {calculatedStats.todayApplications}
                       </p>
                     </div>
                     <Calendar className="w-8 h-8 text-green-600" />
@@ -187,7 +244,7 @@ const AdminApplicationsPage = () => {
                     <div>
                       <p className="text-sm font-medium text-gray-600">Avg Response Time</p>
                       <p className="text-2xl font-bold text-gray-900">
-                        {stats?.overview?.avgResponseTime || 0} days
+                        {calculatedStats.avgResponseTime} days
                       </p>
                     </div>
                     <Clock className="w-8 h-8 text-orange-600" />
@@ -202,9 +259,7 @@ const AdminApplicationsPage = () => {
                     <div>
                       <p className="text-sm font-medium text-gray-600">Success Rate</p>
                       <p className="text-2xl font-bold text-gray-900">
-                        {stats?.statusDistribution ? 
-                          Math.round((stats.statusDistribution.find(s => s.status === 'ACCEPTED')?.count || 0) / 
-                          (stats.overview.totalApplications || 1) * 100) : 0}%
+                        {calculatedStats.successRate}%
                       </p>
                     </div>
                     <TrendingUp className="w-8 h-8 text-purple-600" />

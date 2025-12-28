@@ -29,9 +29,9 @@ const Navbar = () => {
 
   // Check authentication status on mount
   useEffect(() => {
-    const token = Cookies.get("token");
+    const token = localStorage.getItem("user");
     if (token) {
-    //   setIsLoggedIn(true);
+      setIsLoggedIn(true);
     }
   }, []);
 
@@ -178,17 +178,17 @@ const Navbar = () => {
                 </div>
               ) : (
                 <div className="flex items-center space-x-4">
-                  <Link
+                  {/* <Link
                     to="http://localhost:3000/login"
                     className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
                   >
                     Sign in
-                  </Link>
+                  </Link> */}
                   <Link
                     to="http://localhost:3000/login"
                     className="bg-blue-600 text-white hover:bg-blue-700 px-4 py-2 rounded-md text-sm font-medium"
                   >
-                    Sign up
+                    Sign In
                   </Link>
                 </div>
               )}
@@ -310,17 +310,17 @@ const Navbar = () => {
                 </div>
               ) : (
                 <div className="space-y-1">
-                  <Link
+                  {/* <Link
                     to="/login"
                     className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
                   >
                     Sign in
-                  </Link>
+                  </Link> */}
                   <Link
                     to="/register"
                     className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
                   >
-                    Sign up
+                    Sign In
                   </Link>
                 </div>
               )}

@@ -348,7 +348,7 @@ const Dashboard = () => {
           </div>
 
           {/* Quick Actions */}
-          <div className="bg-white rounded-xl shadow-md p-6">
+          {/* <div className="bg-white rounded-xl shadow-md p-6">
             <h3 className="text-lg font-bold text-gray-800 mb-4">Quick Actions</h3>
             <div className="grid grid-cols-2 gap-3">
               <button className="bg-blue-50 hover:bg-blue-100 p-3 rounded-lg flex flex-col items-center justify-center transition-colors">
@@ -376,7 +376,7 @@ const Dashboard = () => {
                 </span>
               </button>
             </div>
-          </div>
+          </div> */}
 
           {/* Upcoming Section */}
           <div className="bg-white rounded-xl shadow-md p-6">

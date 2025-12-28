@@ -7,11 +7,8 @@ import {
   Clock, 
   DollarSign, 
   Building2, 
-  BookmarkIcon, 
-  ExternalLink,
-  Star,
-  TrendingUp,
-  Zap
+  Zap,
+  TrendingUp
 } from "lucide-react";
 
 const JobRecommendations = ({ recommendations, studentPreferences }) => {
@@ -93,15 +90,6 @@ const JobRecommendations = ({ recommendations, studentPreferences }) => {
     }
   };
 
-  const handleSaveJob = async (jobId) => {
-    // Implementation for saving job
-    console.log("Save job:", jobId);
-  };
-
-  const handleViewJob = (jobId) => {
-    window.location.href = `/student/dashboard/jobs/${jobId}`;
-  };
-
   if (!recommendations || recommendations.length === 0) {
     return (
       <div className="bg-white rounded-lg border border-gray-200 p-6">
@@ -112,16 +100,9 @@ const JobRecommendations = ({ recommendations, studentPreferences }) => {
         <div className="text-center py-8">
           <Briefcase className="w-12 h-12 text-gray-300 mx-auto mb-4" />
           <p className="text-gray-500 mb-2">No recommendations yet</p>
-          <p className="text-sm text-gray-400 mb-4">
+          <p className="text-sm text-gray-400">
             Complete your profile to get personalized job recommendations
           </p>
-          <button 
-            onClick={() => window.location.href = "/student/dashboard/profile"}
-            className="inline-flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Complete Profile
-            <ArrowRight className="w-4 h-4" />
-          </button>
         </div>
       </div>
     );
@@ -134,12 +115,6 @@ const JobRecommendations = ({ recommendations, studentPreferences }) => {
           <Zap className="w-5 h-5 text-yellow-500" />
           Recommended for You
         </h3>
-        <button 
-          onClick={() => window.location.href = "/student/dashboard/jobs?recommended=true"}
-          className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center gap-1"
-        >
-          View All <ArrowRight className="w-3 h-3" />
-        </button>
       </div>
 
       <div className="space-y-4">
@@ -151,8 +126,7 @@ const JobRecommendations = ({ recommendations, studentPreferences }) => {
           return (
             <div 
               key={job.id} 
-              className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-all duration-200 cursor-pointer group"
-              onClick={() => handleViewJob(job.id)}
+              className="border border-gray-200 rounded-lg p-4"
             >
               {/* Header */}
               <div className="flex items-start justify-between mb-3">
@@ -173,7 +147,7 @@ const JobRecommendations = ({ recommendations, studentPreferences }) => {
 
                   {/* Job Info */}
                   <div className="flex-1 min-w-0">
-                    <h4 className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-1">
+                    <h4 className="font-medium text-gray-900 line-clamp-1">
                       {job.title}
                     </h4>
                     <p className="text-sm text-gray-600">{company.name || company.companyName}</p>
@@ -186,30 +160,6 @@ const JobRecommendations = ({ recommendations, studentPreferences }) => {
                       <span className="text-xs text-gray-500">({matchScore}% match)</span>
                     </div>
                   </div>
-                </div>
-
-                {/* Actions */}
-                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleSaveJob(job.id);
-                    }}
-                    className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                    title="Save job"
-                  >
-                    <BookmarkIcon className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleViewJob(job.id);
-                    }}
-                    className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"
-                    title="View details"
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                  </button>
                 </div>
               </div>
 
@@ -284,19 +234,11 @@ const JobRecommendations = ({ recommendations, studentPreferences }) => {
         })}
       </div>
 
-      {/* Footer CTA */}
+      {/* Footer Info */}
       <div className="mt-6 pt-4 border-t border-gray-100">
-        <div className="flex items-center justify-between">
-          <div className="text-sm text-gray-600">
-            <TrendingUp className="w-4 h-4 inline mr-1" />
-            {recommendations.length} jobs match your preferences
-          </div>
-          <button 
-            onClick={() => window.location.href = "/student/dashboard/jobs?recommended=true"}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
-          >
-            Explore All
-          </button>
+        <div className="flex items-center text-sm text-gray-600">
+          <TrendingUp className="w-4 h-4 inline mr-1" />
+          {recommendations.length} jobs match your preferences
         </div>
       </div>
     </div>

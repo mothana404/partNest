@@ -1,3 +1,4 @@
+const { log } = require("console");
 const { Category, User } = require("../../models/associations");
 const ApiResponse = require("../utils/response");
 const { Op } = require('sequelize');
@@ -6,14 +7,14 @@ const categoryController = {
   getAll: async (req, res) => {
     try {
       const { active = true } = req.query;
-      
+      console.log("active", active);
       const whereCondition = {};
       if (active !== 'all') {
-        whereCondition.isActive = active === 'true';
+        whereCondition.isActive = 'true';
       }
 
       const categories = await Category.findAll({
-        // where: whereCondition,
+        where: whereCondition,
         order: [['name', 'ASC']],
         attributes: ['id', 'name', 'isActive', 'createdAt', 'updatedAt']
       });

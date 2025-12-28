@@ -33,7 +33,7 @@ const CreateJobForm = ({ onSubmit, onCancel }) => {
   const [loading, setLoading] = useState(false);
 
   const jobTypes = [
-    { value: "FULL_TIME", label: "Full Time" },
+    // { value: "FULL_TIME", label: "Full Time" },
     { value: "PART_TIME", label: "Part Time" },
     { value: "CONTRACT", label: "Contract" },
     { value: "INTERNSHIP", label: "Internship" },
@@ -56,11 +56,11 @@ const CreateJobForm = ({ onSubmit, onCancel }) => {
   ];
 
   const educationLevels = [
-    "High School",
+    // "High School",
     "Associate Degree",
     "Bachelor's Degree",
     "Master's Degree",
-    "PhD",
+    // "PhD",
   ];
 
   const currencies = [

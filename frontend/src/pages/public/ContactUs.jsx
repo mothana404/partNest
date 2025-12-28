@@ -243,7 +243,7 @@ const ContactUs = () => {
               <QuickContactCard
                 icon={<FaClock />}
                 title="Working Hours"
-                content={["Monday - Friday: 9AM - 5PM", "Weekend: 10AM - 3PM"]}
+                content={["sunday - thursday: 9AM - 5PM", "Weekend: 9AM - 4PM"]}
                 highlight="Available 24/7 Online"
                 color="blue"
                 delay={0.1}
