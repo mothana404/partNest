@@ -549,7 +549,84 @@ const profilesControllers = {
       console.error("Edit company profile error:", error);
       return ApiResponse.errorResponse(res, 500, "Failed to update company profile");
     }
-  }
+  },
+
+  companyProfileDetails: async (req, res) => {
+    try {
+      const { companyId } = req.params; // Get companyId from route params
+      
+      if (!companyId) {
+        return ApiResponse.errorResponse(res, 400, "Company ID is required");
+      }
+
+      // Find the company first
+      const company = await Company.findByPk(companyId, {
+        include: [
+          {
+            model: User,
+            as: 'user', // Assuming Company belongsTo User
+            attributes: { exclude: ['password'] },
+            include: [
+              {
+                model: Link,
+                as: 'links',
+                required: false
+              }
+            ]
+          }
+        ]
+      });
+
+      if (!company) {
+        return ApiResponse.errorResponse(res, 404, "Company profile not found");
+      }
+
+      const user = company.user;
+
+      if (!user) {
+        return ApiResponse.errorResponse(res, 404, "Company user not found");
+      }
+
+      const responseData = {
+        user: {
+          user_id: user.user_id,
+          email: user.email,
+          fullName: user.fullName,
+          phoneNumber: user.phoneNumber,
+          location: user.location,
+          image: user.image,
+          background: user.background,
+          role: user.role,
+          isActive: user.isActive,
+          isVerified: user.isVerified,
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt,
+        },
+        company: {
+          id: company.id,
+          userId: company.userId,
+          companyName: company.companyName,
+          industry: company.industry,
+          description: company.description,
+          website: company.website,
+          size: company.size,
+          foundedYear: company.foundedYear,
+          contactEmail: company.contactEmail,
+          contactPhone: company.contactPhone,
+          address: company.address,
+          isVerified: company.isVerified,
+          createdAt: company.createdAt,
+          updatedAt: company.updatedAt
+        },
+        links: user.links || []
+      };
+
+      return ApiResponse.successResponse(res, 200, "Company profile retrieved successfully", responseData);
+    } catch (error) {
+      console.error("Get company profile error:", error);
+      return ApiResponse.errorResponse(res, 500, "Failed to get company profile");
+    }
+  },
 };
 
 module.exports = profilesControllers;

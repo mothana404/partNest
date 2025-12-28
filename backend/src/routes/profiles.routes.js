@@ -40,4 +40,9 @@ router.post(
   profilesControllers.editCompany
 );
 
+router.get(
+  "/companyProfileDetails/:companyId",
+  profilesControllers.companyProfileDetails
+);
+
 module.exports = router;
