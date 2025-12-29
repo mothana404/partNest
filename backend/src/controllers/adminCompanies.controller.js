@@ -123,8 +123,10 @@ const adminCompaniesController = {
         return notFoundResponse(res, "Company not found");
       }
 
+      const userAccount = await company.findByPk(company.user.userId);
+
       await company.update({ isVerified });
-      await company.user.update({ isVerified });
+      await userAccount.update({ isVerified });
 
       successResponse(res, 200, `Company ${isVerified ? 'verified' : 'unverified'} successfully`, {
         companyId: id,

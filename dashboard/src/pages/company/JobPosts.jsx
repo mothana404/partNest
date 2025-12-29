@@ -6,6 +6,8 @@ import JobDetailsView from "../../components/company/jobs/JobDetailsView";
 import Pagination from "../../components/company/jobs/Pagination";
 import { useAuth } from "../../hooks/useAuth";
 import axios from "axios";
+import Swal from "sweetalert2";
+import "sweetalert2/dist/sweetalert2.min.css";
 
 const JobPosts = () => {
   const { user, getToken } = useAuth();
@@ -84,9 +86,23 @@ const JobPosts = () => {
       if (response.data.success) {
         setActiveTab("list");
         await fetchJobs();
+        Swal.fire({ icon: "success", title: "Job Posted", text: "Your job has been posted successfully." });
+      }
+      
+      if (response.data.success === false && response.status === 403) {
+        setJobs([]);
+        setTotalPages(0);
+        Swal.fire({ icon: "error", title: "Company Not Verified", text: response.data.message || "Your company is not verified to post jobs. Please contact support." });
       }
     } catch (error) {
       console.error("Error creating job:", error);
+      if (error?.response?.status === 403) {
+        setJobs([]);
+        setTotalPages(0);
+        Swal.fire({ icon: "error", title: "Company Not Verified", text: error.response?.data?.message || "Your company is not verified to post jobs. Please contact support." });
+      } else {
+        Swal.fire({ icon: "error", title: "Error", text: "There was an error creating the job. Please try again." });
+      }
     } finally {
       setLoading(false);
     }
@@ -112,16 +128,27 @@ const JobPosts = () => {
       if (response.data.success) {
         setActiveTab("list");
         await fetchJobs();
+        Swal.fire({ icon: "success", title: "Job Updated", text: "Job updated successfully." });
       }
     } catch (error) {
       console.error("Error updating job:", error);
+      Swal.fire({ icon: "error", title: "Error", text: "Failed to update job. Please try again." });
     } finally {
       setLoading(false);
     }
   };
 
   const handleDeleteJob = async (jobId) => {
-    if (window.confirm("Are you sure you want to delete this job?")) {
+    const confirmation = await Swal.fire({
+      title: "Are you sure?",
+      text: "This action will permanently delete this job.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it",
+      cancelButtonText: "Cancel"
+    });
+
+    if (confirmation.isConfirmed) {
       try {
         const token = getToken();
         const response = await axios.delete(
@@ -133,9 +160,11 @@ const JobPosts = () => {
 
         if (response.data.success) {
           await fetchJobs();
+          Swal.fire({ icon: "success", title: "Deleted", text: "Job deleted successfully." });
         }
       } catch (error) {
         console.error("Error deleting job:", error);
+        Swal.fire({ icon: "error", title: "Error", text: "Failed to delete job. Please try again." });
       }
     }
   };

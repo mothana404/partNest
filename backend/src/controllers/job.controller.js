@@ -105,6 +105,14 @@ const companyController = {
         return ApiResponse.errorResponse(res, 404, "Company not found");
       }
 
+      const userAccount = await User.findByPk(userId);
+
+      console.log(userAccount.dataValues.isVerified);
+      
+      if (userAccount.dataValues.isVerified === false) {
+        return ApiResponse.errorResponse(res, 403, "Company is not verified to post jobs");
+      }
+
       // Extract tags from request body
       const { tags = [], ...jobData } = req.body;
 
