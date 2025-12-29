@@ -222,7 +222,7 @@ const CompaniesTable = ({
                       View Details
                     </DropdownItem>
                     <div className="border-t border-gray-100"></div>
-                    {/* <DropdownItem 
+                    <DropdownItem 
                       onClick={() => onVerifyCompany(company.id, !company.isVerified)}
                     >
                       {company.isVerified ? (
@@ -236,7 +236,7 @@ const CompaniesTable = ({
                           Verify
                         </>
                       )}
-                    </DropdownItem> */}
+                    </DropdownItem>
                     <DropdownItem onClick={() => onToggleStatus(company.id)}>
                       {company.user?.isActive ? (
                         <>

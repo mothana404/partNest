@@ -10,7 +10,7 @@ router.use(authorize("ADMIN"));
 
 router.get("/getAll", adminCompaniesController.getAllCompanies);
 router.get("/:id", adminCompaniesController.getCompanyById);
-router.patch("/:id/verify", adminCompaniesController.verifyCompany);
+router.patch("/:id/verifyAccount", adminCompaniesController.verifyCompany);
 router.patch("/:id/toggle-status", adminCompaniesController.toggleCompanyStatus);
 router.delete("/:id", adminCompaniesController.deleteCompany);
 router.get("/stats/overview", adminCompaniesController.getCompaniesStats);

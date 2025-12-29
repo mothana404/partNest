@@ -87,6 +87,19 @@ const AdminCompaniesPage = () => {
     setCurrentPage(1);
   }, [searchInput, verifiedFilter, activeFilter, industryFilter]);
 
+  // Refresh function to update both companies and stats
+  const refreshData = async () => {
+    const serverFilters = {
+      isVerified: verifiedFilter,
+      isActive: activeFilter,
+      industry: industryFilter
+    };
+    await Promise.all([
+      fetchAllCompanies(serverFilters),
+      fetchStats()
+    ]);
+  };
+
   const handleFilterChange = (key, value) => {
     switch(key) {
       case 'search':
@@ -119,18 +132,15 @@ const AdminCompaniesPage = () => {
   };
 
   const handleVerifyCompany = async (companyId, isVerified) => {
-    await verifyCompany(companyId, isVerified);
-    await fetchStats();
+    await verifyCompany(companyId, isVerified, refreshData);
   };
 
   const handleToggleStatus = async (companyId) => {
-    await toggleCompanyStatus(companyId);
-    await fetchStats();
+    await toggleCompanyStatus(companyId, refreshData);
   };
 
   const handleDelete = async (companyId) => {
-    await deleteCompany(companyId);
-    await fetchStats();
+    await deleteCompany(companyId, refreshData);
   };
 
   // UI Components

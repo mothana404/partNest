@@ -12,7 +12,7 @@ router.get("/:userId", adminUsersController.getUserById);
 router.put("/:userId", adminUsersController.updateUser);
 router.delete("/:userId", adminUsersController.deleteUser);
 router.patch("/:userId/status", adminUsersController.toggleUserStatus);
-router.patch("/:userId/verify", adminUsersController.verifyUser);
+router.patch("/:userId/verifyEmail", adminUsersController.verifyUser);
 router.patch("/:userId/role", adminUsersController.changeUserRole);
 router.post("/:userId/reset-password", adminUsersController.resetUserPassword);
 

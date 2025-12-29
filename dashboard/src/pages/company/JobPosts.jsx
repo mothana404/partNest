@@ -101,7 +101,7 @@ const JobPosts = () => {
         setTotalPages(0);
         Swal.fire({ icon: "error", title: "Company Not Verified", text: error.response?.data?.message || "Your company is not verified to post jobs. Please contact support." });
       } else {
-        Swal.fire({ icon: "error", title: "Error", text: "There was an error creating the job. Please try again." });
+        Swal.fire({ icon: "error", title: "Error", text: error.response.data.errors || "There was an error creating the job. Please try again." });
       }
     } finally {
       setLoading(false);

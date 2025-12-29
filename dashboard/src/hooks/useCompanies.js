@@ -110,9 +110,9 @@ export const useCompanies = () => {
     }
   }, [API_BASE_URL, getAuthHeaders]);
 
-  const verifyCompany = useCallback(async (companyId, isVerified) => {
+  const verifyCompany = useCallback(async (companyId, isVerified, onSuccess) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/adminCompany/${companyId}/verify`, {
+      const response = await fetch(`${API_BASE_URL}/adminCompany/${companyId}/verifyAccount`, {
         method: 'PATCH',
         headers: getAuthHeaders(),
         body: JSON.stringify({ isVerified }),
@@ -128,6 +128,12 @@ export const useCompanies = () => {
           )
         );
         showToast(`Company ${isVerified ? 'verified' : 'unverified'} successfully`);
+        
+        // Call the success callback to trigger refresh
+        if (onSuccess) {
+          await onSuccess();
+        }
+        
         return true;
       } else {
         const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));
@@ -140,7 +146,7 @@ export const useCompanies = () => {
     }
   }, [API_BASE_URL, getAuthHeaders, showToast]);
 
-  const toggleCompanyStatus = useCallback(async (companyId) => {
+  const toggleCompanyStatus = useCallback(async (companyId, onSuccess) => {
     try {
       const response = await fetch(`${API_BASE_URL}/adminCompany/${companyId}/toggle-status`, {
         method: 'PATCH',
@@ -158,6 +164,12 @@ export const useCompanies = () => {
           )
         );
         showToast(`Company ${data.data.isActive ? 'activated' : 'deactivated'} successfully`);
+        
+        // Call the success callback to trigger refresh
+        if (onSuccess) {
+          await onSuccess();
+        }
+        
         return true;
       } else {
         const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));
@@ -170,7 +182,7 @@ export const useCompanies = () => {
     }
   }, [API_BASE_URL, getAuthHeaders, showToast]);
 
-  const deleteCompany = useCallback(async (companyId) => {
+  const deleteCompany = useCallback(async (companyId, onSuccess) => {
     try {
       const response = await fetch(`${API_BASE_URL}/adminCompany/${companyId}`, {
         method: 'DELETE',
@@ -181,6 +193,12 @@ export const useCompanies = () => {
         // Remove from local state immediately
         setAllCompanies(prev => prev.filter(company => company._id !== companyId));
         showToast('Company deleted successfully');
+        
+        // Call the success callback to trigger refresh
+        if (onSuccess) {
+          await onSuccess();
+        }
+        
         return true;
       } else {
         const errorData = await response.json().catch(() => ({ message: 'Unknown error' }));

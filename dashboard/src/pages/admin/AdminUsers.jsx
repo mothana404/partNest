@@ -121,7 +121,7 @@ const AdminUsers = () => {
           break;
         case 'verify':
           response = await axios.patch(
-            `http://localhost:8080/api/admin/users/${userId}/verify`,
+            `http://localhost:8080/api/admin/users/${userId}/verifyEmail`,
             data,
             { headers: { Authorization: `Bearer ${token}` } }
           );

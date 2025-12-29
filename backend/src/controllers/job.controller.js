@@ -101,15 +101,12 @@ const companyController = {
 
       // Get company ID from authenticated user
       const company = await Company.findOne({ where: { userId } });
+
       if (!company) {
         return ApiResponse.errorResponse(res, 404, "Company not found");
       }
-
-      const userAccount = await User.findByPk(userId);
-
-      console.log(userAccount.dataValues.isVerified);
       
-      if (userAccount.dataValues.isVerified === false) {
+      if (company.dataValues.isVerified === false) {
         return ApiResponse.errorResponse(res, 403, "Company is not verified to post jobs");
       }
 
